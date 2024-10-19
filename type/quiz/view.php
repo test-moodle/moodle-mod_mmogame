@@ -38,6 +38,8 @@ require_once($CFG->dirroot."/mod/mmogame/model/{$model}.php");
 
 if (has_capability('mod/mmogame:manage', $context)) {
     mmogame_quiz_manage( $id, $mmogame);
+} else {
+    redirect( $CFG->wwwroot.'/mod/mmogame/gate.php?pin='.$mmogame->get_rinstance()->pin);
 }
 
 function mmogame_quiz_manage( $id, $mmogame) {

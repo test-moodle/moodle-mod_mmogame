@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 define( 'MMOGAME_PIN_DIGITS', 6);
 
-define( 'MMOGAME_KINDUSER_QUID', 'guid');
+define( 'MMOGAME_KINDUSER_GUID', 'guid');
 define( 'MMOGAME_KINDUSER_MOODLE', 'moodle');
 
 require_once($CFG->dirroot . '/course/moodleform_mod.php');
@@ -90,7 +90,7 @@ class mod_mmogame_mod_form extends moodleform_mod {
         $this->definition_question( $mform);
 
         $usersoptions = [];
-        $usersoptions[MMOGAME_KINDUSER_QUID] = get_string('kinduser_guid', 'mmogame');
+        $usersoptions[MMOGAME_KINDUSER_GUID] = get_string('kinduser_guid', 'mmogame');
         $usersoptions[MMOGAME_KINDUSER_MOODLE] = get_string('kinduser_moodle', 'mmogame');
         $mform->addElement('select', 'kinduser', get_string('kinduser', 'mmogame'), $usersoptions);
 
@@ -133,7 +133,7 @@ class mod_mmogame_mod_form extends moodleform_mod {
         // Pin.
         $mform->addElement('text', 'pin', "PIN", ['size' => '10']);
         $mform->setType('pin', PARAM_INT);
-        $mform->hideIf('pin', 'user', 'neq', MMOGAME_KINDUSER_QUID);
+        $mform->hideIf('pin', 'user', 'neq', MMOGAME_KINDUSER_GUID);
 
         // Enabled.
         $mform->addElement('advcheckbox', 'enabled', get_string( 'enabled', 'mmogame'),
@@ -170,7 +170,7 @@ class mod_mmogame_mod_form extends moodleform_mod {
             }
         }
 
-        if ($data['kinduser'] == MMOGAME_KINDUSER_QUID) {
+        if ($data['kinduser'] == MMOGAME_KINDUSER_GUID) {
             if (intval( $data['pin']) == 0) {
                 $errors['pin'] = get_string( 'missing_pin', 'mmogame');
             }

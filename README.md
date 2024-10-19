@@ -19,14 +19,14 @@ Created by: Vasilis Daloukas (https://scholar.google.com/citations?user=jFFbeLsA
 
 Many ideas and code were taken from other Moodle modules and Moodle itself
 
-This module gets input from glossary or questions and plays some games with other player. The games are:
+This module gets input from questions and plays some games with other player. The games are:
 
 * quiz (alone, aduel)
 
-If you like the Game activity module please consider donating at https://www.paypal.com/donate/?hosted_button_id=V24FXGMRSZ37J&Z3JncnB0= to help me have more time to continue working on this project. This module is and will remain free, but your donation allows me to continue the development, and any amount is greatly appreciated.
+If you like the mmoGame activity module please consider donating at https://www.paypal.com/donate/?hosted_button_id=V24FXGMRSZ37J&Z3JncnB0= to help me have more time to continue working on this project. This module is and will remain free, but your donation allows me to continue the development, and any amount is greatly appreciated.
 
 * Changelog: CHANGES.md
-* Documentation: 
+* Documentation: http://docs.moodle.org/en/mmoGame_module
 * Browse source code: https://github.com/bdaloukas/moodle-mod_mmogame
 * Discussion: 
 * Bugs and Issues: 

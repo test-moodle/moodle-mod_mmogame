@@ -85,37 +85,25 @@ function mmogame_change_javascript( $file) {
 
     $source = $dest = [];
 
-    // Start from LANG (for one type only) and finish with '":.
-    preg_match_all('/[\'":\.]LANG_[A-Z_]+[\'":\.]/', $s, $matches);
-    $langstrings = array_map(function($match) {
-        return trim($match, '\'"');
-    }, $matches[0]);
-    foreach ($langstrings as $string) {
-        $string = rtrim($string, ':.');
-        if ($string[ -1] == '_') {
-            $string = rtrim($string, '_').' ';
+    // Start from [LANG and finish with ].
+    preg_match_all('/\[LANG_[A-Z0-9_]+\]/', $s, $matches);
+    
+    foreach ($matches as $stringm) {
+        foreach( $stringm as $string) {
+            $source[] = $string; 
+            $name = 'js_'.strtolower( substr( trim($string, '[]'), 5));
+            $dest[] = get_string( $name, 'mmogametype_'.$instance->type);
         }
-
-        $source[] = $string;
-        $dest[] = get_string( 'js_'.strtolower( substr( $string, 5)), 'mmogametype_'.$instance->type);
     }
 
-    // Start from LANGM (for whole module) and finish with '":.
-    preg_match_all('/[\'":\.]LANGM_[A-Z_]+[\'":\.]/', $s, $matches);
-    $langstrings = array_map(function($match) {
-        return trim($match, '\'"');
-    }, $matches[0]);
-    foreach ($langstrings as $string) {
-        $string = rtrim($string, ':.');
-        $needspace = false;
-        if ($string[ -1] == '_') {
-            $string = rtrim($string, '_');
-            $needspace = true;
+    // Start from [LANGM (for whole module) and finish with ].
+    preg_match_all('/\[LANGM_[A-Z0-9_]+\]/', $s, $matches);
+    foreach ($matches as $stringm) {
+        foreach( $stringm as $string) {
+            $source[] = $string;
+            $name = 'js_'.strtolower( substr( trim($string, '[]'), 6)); 
+            $dest[] = get_string( $name, 'mmogame');
         }
-
-        $source[] = $string;
-        $name = 'js_'.strtolower( substr( $string, 6));
-        $dest[] = get_string( $name, 'mmogame').($needspace ? ' ' : '');
     }
 
     echo str_replace( $source, $dest, $s);

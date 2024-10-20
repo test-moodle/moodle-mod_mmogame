@@ -93,6 +93,7 @@ $string['import_completed'] = 'Έγινε εισαγωγή {$a} ερωτήσεω
 // Javascript.
 $string['js_date'] = 'Date';
 $string['js_grade'] = 'Grade';
+$string['js_grade_oponent'] = "Oponents' grade";
 $string['js_name'] = 'Name';
 $string['js_code'] = 'Code';
 $string['js_palette'] = 'Color palette';
@@ -100,6 +101,11 @@ $string['js_game_over'] = 'Game over';
 $string['js_percent'] = 'Percent';
 $string['js_wait_to_start'] = "Wait to start.";
 $string['js_date'] = 'Date';
+$string['js_ranking_grade'] = 'Ranking order based on score';
+$string['js_ranking_percent'] = 'Ranking order based on the percentage of correct answers';
+$string['js_grade_last_question'] = 'Last question marks';
+$string['js_percent'] = 'Percentage of correct answers';
+$string['js_question_time'] = 'Question time';
 
 
 // Admin.

@@ -51,7 +51,7 @@ class mmogame_gate extends mmogame {
         let size
 
         this.fontSize = this.findbest( this.minFontSize, this.maxFontSize, 0, 0, function (fontSize, step) {
-            size = instance.computeLabelSize( fontSize, ['LANGM_CODE' + ': ', 'LANGM_NAME'+': ', 'LANGM_PALETTE'])
+            size = instance.computeLabelSize( fontSize, ['[LANGM_CODE]: ', '[LANGM_NAME]: ', '[LANGM_PALETTE]'])
             
             if( size[ 0] >= maxWidth) { 
                 return 1
@@ -167,7 +167,7 @@ class mmogame_gate extends mmogame {
         let size
 
         this.fontSize = this.findbest( this.minFontSize, this.maxFontSize, 0, 0, function (fontSize, step) {
-            size = instance.computeLabelSize( fontSize, ['LANGM_CODE: ', 'LANGM_NAME: ', 'LANGM_PALETTE'])
+            size = instance.computeLabelSize( fontSize, ['[LANGM_CODE]: ', '[LANGM_NAME]: ', '[LANGM_PALETTE]'])
             
             if( size[ 0] >= maxWidth) { 
                 return 1
@@ -205,7 +205,7 @@ class mmogame_gate extends mmogame {
             bottom = 0
         }
         let sizeLabel = this.computeLabelSize( this.fontSize, ['Όνομα: '])
-        bottom = this.createLabelEdit( 0, bottom, newWidth - 2 * this.padding, this.fontSize, sizeLabel[ 0], "LANGM_NAME: ")
+        bottom = this.createLabelEdit( 0, bottom, newWidth - 2 * this.padding, this.fontSize, sizeLabel[ 0], "[LANGM_NAME]: ")
 
         this.edtNickname = this.edt
         this.edtNickname.addEventListener("keyup", function(){ instance.updateSubmit()})              
@@ -214,7 +214,7 @@ class mmogame_gate extends mmogame {
         
         let label1 = document.createElement( "label")
         label1.style.position = "absolute"
-        label1.innerHTML =  "LANGM_PALETTE"
+        label1.innerHTML =  "[LANGM_PALETTE]"
         label1.style.font = "FontAwesome"
         label1.style.fontSize = this.fontSize + "px"
         label1.style.width = "0px";

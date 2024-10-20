@@ -106,28 +106,9 @@ class mmogame {
         }
         if( this.kinduser == undefined) {
             this.onAfterOpenGame()
-        } else if( this.kinduser == 'usercode') {
-            this.createScreenSelectUser( auserid);
         } else {
 			this.onAfterOpenGame()
 		}
-    }
-
-    createScreenSelectUser( auserid) {
-        let s = auserid == 0 ? sessionStorage.getItem("auserid") : auserid
-
-        if( s  == undefined) {
-            s = prompt( "Δώσε τον κωδικό σου")
-            if( s.length == 0)  {
-                alert( 'Δεν έχετε δώσει κωδικό')
-                return
-            }
-            sessionStorage.setItem("auserid", s)
-        }
-          
-        this.auserid = s
-
-        this.onAfterOpenGame()
     }
 
     createImageButton( parent, left, top, width, height, classname, filename, wrap, alt) {
@@ -150,7 +131,6 @@ class mmogame {
         if( height != 0) {
             button.style.height = height + "px"
         }
-        //button.innerHTML = filename
         button.style.fontSize = height + "px"
         if( filename !== undefined && filename !== '') {
             button.src = filename
@@ -175,7 +155,6 @@ class mmogame {
         if( height !== 0) {
             button.style.height = height + "px"
         }
-        //button.innerHTML = filename
         button.style.fontSize = height + "px"
         if( filename !== undefined && filename !== '') {
             button.src = filename
@@ -242,51 +221,13 @@ class mmogame {
             img.src = filename
         }
         button.tabIndex = 0
-        //button.setAttribute("role", "button")        
         parent.appendChild( button)
 
         return button
     }
 
     updateImageButton( button, left, top, width, height, filename) {
-
         button.src = filename
-        return
-        
-        let instance = this
-        //let img = new Image();
-        
-        if( filename != undefined && filename != "") {
-            button.src = filename
-            img.style.left = left + "px"
-            img.style.top = top + "px"
-            img.style.visibility = 'hidden'
-            img.src = filename
-        }
-        img.onload = function() {
-            if( this.width == 0 || this.height == 0) {
-                this.width = this.height = 1;
-            }
-                
-            if( this.width > 0 && this.height > 0) {
-                let mul = Math.min( width / this.width, height / this.height)
-                let w = Math.round( this.width * mul)
-                let h = Math.round( this.height * mul)
-                
-                // Converts to png for fast.
-                var canvas = document.createElement('canvas');
-                canvas.style.width = w;
-                canvas.style.height = h;
-                var ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, w, h);
-                let image = canvas.toDataURL("image/png");
-            
-                button.style.left = (left + width / 2 - w / 2) + "px"
-                button.style.top = (top + height / 2 - h / 2) + "px"
-
-                button.src = image
-            }
-        }
     }
     
     updateCenterImageButton( button, left, top, width, height, filename) {
@@ -320,10 +261,6 @@ class mmogame {
             
                 button.style.left = (left + width / 2 - w / 2) + "px"
                 button.style.top = (top + height / 2 - h / 2) + "px"
-                //button.style.width = w + "px"
-                //button.style.height = h + "px"
-                
-                console.log( "w=" + w + " imgwidth=" + img.width)
 
                 button.src = image
             }
@@ -369,7 +306,6 @@ class mmogame {
     }
 
     autoResizeText( item, width, height, wrap, minFontSize, maxFontSize, minRatio) {
-var t0 = performance.now()
         var minHeight = 0.9 * height 
         var low = Math.max( 1, minFontSize)
         width = Math.round( width);
@@ -440,7 +376,6 @@ var t0 = performance.now()
             this.body.removeChild( el)
 
             return size
-        //return [item.scrollWidth, item.scrollHeight]
     }
 
     autoResizeText_br( item) {
@@ -546,7 +481,6 @@ var t0 = performance.now()
     }
 
     computeSizes() {
-
         if( this.cIcons < 5 || this.cIcons == undefined) {
             this.cIcons = 5
         }
@@ -556,8 +490,6 @@ var t0 = performance.now()
 
         this.padding =  Math.round( this.iconSize / 10)
         this.iconSize -= this.padding
-        
-console.log( "width=" + window.innerWidth + " cIcons=" + this.cIcons + " iconSize=" + this.iconSize + " ratio=" + (window.innerHeight / window.innerWidth))
     }
 
     getIconSize() {
@@ -648,7 +580,6 @@ console.log( "width=" + window.innerWidth + " cIcons=" + this.cIcons + " iconSiz
 
         let fontSize = Math.min(fitFontHeight, fitFontWidth)
         ctx.font = fontSize + "px " + fontName
-console.log( "font=" + ctx.font + " (" + fitFontHeight + "," +  fitFontWidth + ")")
 
         return parseInt( ctx.font)
     }
@@ -692,7 +623,6 @@ console.log( "font=" + ctx.font + " (" + fitFontHeight + "," +  fitFontWidth + "
 
             var x = Math.round( left + ix * cellSize + iy * xOfs) - xOfs
             var y = Math.round( top + iy * cellSize)
-//console.log( "ix=" + ix + " x=" + x + " letter=" + letter + " padding=" + padding + " xOfs=" + xOfs)
             var btn = this.createTextButton( parent, x, y, Math.round( sizeButton), Math.round( sizeButton), '')
             btn.style.background = this.getColorHex( colorButton)
             btn.style.color = this.getColorContrast( colorButton)
@@ -776,7 +706,6 @@ console.log( "font=" + ctx.font + " (" + fitFontHeight + "," +  fitFontWidth + "
         msg.voiceURI = 'native'
         msg.text = text
         msg.lang = this.language
-console.log( "lang=" + msg.lang + " say=" + msg.text)
         msg.onend = function(e) {
             console.log('Finished in ' + event.elapsedTime + ' seconds.');
         };
@@ -954,18 +883,16 @@ console.log( "lang=" + msg.lang + " say=" + msg.text)
         button.style.left = left + "px"
         button.style.top = top + "px"
         button.style.width = this.iconSize + "px"
-        //button.style.padding = "0px 0px " + Math.round( this.iconSize / 2) + "px 0px"
         button.style.height = this.iconSize + "px"
         button.style.lineHeight = this.iconSize + "px"
         button.style.textAlign = "center"
-        //button.style.borderRadius = "0px"
         button.style.border = "0px solid " + this.getColorHex( 0xFFFFFF)
         button.style.boxShadow = "inset 0 0 0.125em rgba(255, 255, 255, 0.75)"
         if( num == 1) {
             this.buttonScore = button
             button.style.background = this.getColorHex( this.colorScore)
             button.style.color = this.getColorContrast( this.colorScore)
-            button.title = "Βαθμολογία"
+            button.title = "[LANGM_GRADE]"
         } else {
             this.buttonScore2 = button
             button.style.background = this.getColorHex( this.colorScore2)
@@ -984,17 +911,17 @@ console.log( "lang=" + msg.lang + " say=" + msg.text)
         div.style.color = this.getColorContrast( this.colorScore)
         if( num == 1) {
             this.labelScore = div
-            div.title = 'Βαθμολογία'
+            div.title = '[LANGM_GRADE]'
         } else {
             this.labelScore2 = div
-            div.title = 'Βαθμολογία αντιπάλου'
+            div.title = "[LANGM_GRADE_OPONENT]"
         }
 
         h = this.iconSize / 3
         div = this.createDiv( this.body, left, top, this.iconSize / 2, h)
         div.style.textAlign = "center"
         div.style.color = this.getColorContrast( this.colorScore)
-        div.title = 'Σειρά κατάταξης με βάση τη βαθμολογία'
+        div.title = '[LANGM_RANKING_GRADE]'
         if( num == 1) {
             this.labelScoreRank = div
         } else {
@@ -1004,7 +931,7 @@ console.log( "lang=" + msg.lang + " say=" + msg.text)
         div = this.createDiv( this.body, left, top + this.iconSize - h, this.iconSize / 2, h)
         div.style.textAlign="center"
         div.style.color = this.getColorContrast( this.colorScore)
-        div.title = 'Βαθμοί τελευταίας ερώτησης'
+        div.title = '[LANGM_GRADE_LAST_QUESTION]'
         button.disabled = true
         if( num == 1) {
             this.labelAddScore = div
@@ -1015,13 +942,12 @@ console.log( "lang=" + msg.lang + " say=" + msg.text)
         let label = num == 1 ? this.labelScoreRank : this.labelScoreRank2
 
         div  = this.createDiv( this.body, left + this.iconSize / 2, top, this.iconSize / 2, h)
-        //div.innerHTML = '3'
         div.style.textAlign="center"
         div.style.fontName = label.style.fontName
         div.style.fontSize = h + "px"
         div.style.lineHeight = h + "px"
         div.style.color = label.style.color
-        div.title = 'Σειρά κατάταξης με βάση το ποσοστό των σωστών απαντήσεων.'
+        div.title = '[LANGM_RANKING_PERCENT].'
         if( num == 1) {
             this.labelScoreRankB = div
         } else {
@@ -1036,7 +962,7 @@ console.log( "lang=" + msg.lang + " say=" + msg.text)
         div.style.fontSize = label.style.fontSize
         div.style.fontWeight = 'bold'
         div.style.color = label.style.color
-        div.title = 'Ποσοστό σωστών απαντήσεων στις 31 τελευταίες ερωτήσεις.'
+        div.title = '[LANGM_PERCENT]'
         this.autoResizeText( div, this.iconSize / 2, this.iconSize / 2, false)
         if( num == 1) {
             this.labelScoreB = div
@@ -1064,7 +990,7 @@ console.log( "lang=" + msg.lang + " say=" + msg.text)
         div.innerHTML = '23:59'
         this.autoResizeText( div, sizeIcon, sizeIcon, false, 0, 0, 1)
         div.innerHTML = ''
-        div.title = 'Χρόνος ερώτησης'
+        div.title = '[LANGM_QUESTION_TIME]'
     }
 
     createButtonSound( left, top) {
@@ -1072,15 +998,6 @@ console.log( "lang=" + msg.lang + " say=" + msg.text)
         this.buttonSound.alt = 'Sound'
         var instance = this
         this.buttonSound.addEventListener("click", function(){ instance.onClickSound( this); })
-        //this.buttonSound.addEventListener("touchstart", function(){ instance.onClickSound( this); })
-      /*  
-       new FastButton( this.buttonSound, function() {
-            //instance.divDefinition.textContent = '2';
-            //document.title = '1';
-            instance.onClickSound( instance.buttonSound);
-            //instance.onClickRadio( i, this.colorDefinition, this.colorScore, true)
-        });*/
-
 
         this.buttonSound.title = 'Ήχος'
     }
@@ -1090,7 +1007,6 @@ console.log( "lang=" + msg.lang + " say=" + msg.text)
         this.kindSound = (parseInt( this.kindSound) + 1) % 2
         window.localStorage.setItem( "kindSound", this.kindSound)
         btn.src = this.getMuteFile()
-        //this.buttonSound.style.visibility = 'hidden';
     }
 
     createButtonHome( left, top) {
@@ -1125,7 +1041,6 @@ console.log( "lang=" + msg.lang + " say=" + msg.text)
     }
 
     findbest( low, up, step1, step2, fn) {
-var t0 = performance.now()
         let debug = low + "-" + up
 
         if( low < 1) {
@@ -1162,8 +1077,7 @@ var t0 = performance.now()
                break
             }
         }
-console.log( "findbest (" + debug + ") tries=" + (i-1) + " fitSize=" + fitSize + " time=" + Math.round(performance.now() - t0) + " msec" )
-//document.title = "findbest (" + debug + ") tries=" + (i-1) + " fitSize=" + fitSize + " time=" + Math.round(performance.now() - t0) + " msec" ;
+
         return fitSize
     }
 
@@ -1273,7 +1187,7 @@ console.log( "findbest (" + debug + ") tries=" + (i-1) + " fitSize=" + fitSize +
         }        
 
         let left = this.padding
-        let top = this.areaTop  //this.iconSize + 2 * this.padding
+        let top = this.areaTop
         let width = window.innerWidth - 2 * this.padding
         let height = window.innerHeight - this.getCopyrightHeight() - this.padding - top
         
@@ -1371,21 +1285,7 @@ console.log( "findbest (" + debug + ") tries=" + (i-1) + " fitSize=" + fitSize +
             this.body.appendChild( this.divMessageHelp)
 
             // read text from URL location
-            this.showHelpScreen( div, (width - 2 * this.padding), (height - height1))
-/*            
-            var request = new XMLHttpRequest();
-            request.open('GET', "assets/help/el/" + this.type + ".htm", true);
-            request.send(null);
-            request.onreadystatechange = function () {
-                if (request.readyState === 4 && request.status === 200) {
-                    var type = request.getResponseHeader('Content-Type');
-                    if (type.indexOf("text") !== 1) {
-                        div.innerHTML = request.responseText
-                    }
-                }
-              
-            }
-*/              
+            this.showHelpScreen( div, (width - 2 * this.padding), (height - height1))           
         }
     }
     
@@ -1480,7 +1380,7 @@ console.log( "findbest (" + debug + ") tries=" + (i-1) + " fitSize=" + fitSize +
     }
 
     sendGetAvatars() {
-var xmlhttp = new XMLHttpRequest();
+        var xmlhttp = new XMLHttpRequest();
         var instance = this
         xmlhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
@@ -1560,7 +1460,6 @@ var xmlhttp = new XMLHttpRequest();
     }
 
     OnServerGetAvatars( json) {
-var t0 = performance.now()
 		this.params = true
         if( this.area != undefined) {
             this.body.removeChild( this.area)
@@ -1716,7 +1615,6 @@ var t0 = performance.now()
     }
 
     createScreenColorPalette( json) {
-var t0 = performance.now()
         if( this.area != undefined) {
             this.body.removeChild( this.area)
         }
@@ -1938,16 +1836,6 @@ var t0 = performance.now()
         this.divNicknamesHeight[ num] = heightNickName
 
         this.divNicknames[ num] = this.createDiv( this.body, left, this.padding, widthNickName, heightNickName)
-		
-		/* if( num == 1) {
-			let instance = this
-			this.buttonsAvatar[ num].addEventListener("click", function(){ 
-				if( instance.state == 0) {
-					instance.stopGame(); 
-                    instance.sendGetColorPalettes();  //CHECK
-				}
-			})
-		}*/
     }
 
     updateButtonsAvatar( num, avatar, nickname) {

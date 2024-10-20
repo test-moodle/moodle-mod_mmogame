@@ -77,7 +77,7 @@ class mmogame_quiz_aduel extends mmogame_quiz {
             instance.sendGetHighScore()
         })        
         this.button5050.addEventListener("click", function(){ instance.sendGetAttempt( false, "tool1"); })
-        this.button5050.title = 'LANG_HELP_5050'
+        this.button5050.title = '[LANG_HELP_5050]'
         
         let left;
         if( this.hasBasBottom === false) {
@@ -87,7 +87,7 @@ class mmogame_quiz_aduel extends mmogame_quiz {
             this.buttonSkip = this.createImageButton( this.body, this.padding + 2 * (this.iconSize + this.padding), this.areaTop + this.areaHeight, this.iconSize, this.iconSize, "mmogame_button_red", 'assets/skip.svg')
         }
         this.buttonSkip.addEventListener("click", function(){ instance.sendAnswer( true, "tool2") })
-        this.buttonSkip.title = 'LANG_HELP_SKIP'
+        this.buttonSkip.title = '[LANG_HELP_SKIP]'
         
         if( this.hasBasBottom === false) {
             this.buttonWizard = this.createImageButton( this.body, left, this.padding + this.nickNameHeight, this.iconSize, this.iconSize, "mmogame_button_red", 'assets/wizard.svg')
@@ -96,7 +96,7 @@ class mmogame_quiz_aduel extends mmogame_quiz {
         }
         this.buttonWizard.addEventListener("click", function(){ instance.sendGetAttempt( false, "tool3");})
         this.buttonWizard.style.visibility = 'hidden'
-        this.buttonWizard.title = 'LANG_WIZARD'
+        this.buttonWizard.title = '[LANG_WIZARD]'
         
         if( this.hasHelp()) {
             if( this.hasBasBottom === false) {
@@ -148,7 +148,7 @@ var t0 = performance.now()
                 this.btnSubmit.style.visibility = "hidden"
             }
             this.buttonsAvatar[ 2].style.visibility = 'hidden';            
-            return this.createDivMessageStart( 'LANGM_WAIT_TO_START')
+            return this.createDivMessageStart( '[LANGM_WAIT_TO_START]')
         }
       
         this.state = json.state
@@ -242,7 +242,7 @@ var t0 = performance.now()
         this.disableInput()
         
         let btn = super.createImageButton( this.area, this.nextLeft, this.nextTop, 0, this.iconSize, "", 'assets/next.svg', false, 'alt')
-        btn.title = 'LANG_NEXt_QUESTION'
+        btn.title = '[LANG_NEXT_QUESTION]'
         let instance = this
         btn.addEventListener("click", function(){
             instance.sendGetAttempt( false);
@@ -255,7 +255,7 @@ var t0 = performance.now()
             return
         }
         this.updateButtonsAvatar( 2, "", "")
-        this.createDivMessage( 'LANG_WAIT_OPONENT')
+        this.createDivMessage( '[LANG_WAIT_OPONENT]')
         if( this.labelTimer != undefined) {
             this.labelTimer.innerHTML = ""
         }
@@ -302,7 +302,7 @@ var t0 = performance.now()
         this.showCorrectAnswer( json)
 
         let btn = super.createImageButton( this.area, this.nextLeft, this.nextTop, 0, this.iconSize, "", 'assets/next.svg', false, 'alt')
-        btn.title = 'LANG_NEXT_QUESTION'
+        btn.title = '[LANG_NEXT_QUESTION]'
         let instance = this
         btn.addEventListener("click", function(){
             instance.sendGetAttempt( false); 
@@ -387,7 +387,7 @@ var t0 = performance.now()
             if( iscorrect1 != undefined) {
                 let t = parseInt( this.aItemAnswer[ i].style.top)
                 let div = this.createDiv( this.area, this.aItemCorrectX[ i], t, this.radioSize, this.radioSize)
-                div.title = iscorrect1 ? 'LANG_CORRECT_ANSWER' : 'LANG_WRONG_ANSWER'
+                div.title = iscorrect1 ? '[LANG_CORRECT_ANSWER]' : '[LANG_WRONG_ANSWER]'
                 div.innerHTML = this.getSVGcorrect( this.radioSize, iscorrect1, this.colorScore, this.colorScore)
             }
 
@@ -395,7 +395,7 @@ var t0 = performance.now()
                 let t = parseInt( this.aItemAnswer[ i].style.top)
                 let div = this.createDiv( this.area, this.aItemCorrectX[ i] + this.radioSize, t, this.radioSize, this.radioSize)
                 div.innerHTML = this.getSVGcorrect( this.radioSize, iscorrect2, this.colorScore2, this.colorScore2)
-                div.title = iscorrect2 ? 'LANG_CORRECT_ANSWER' : 'LANG_WRONG_ANSWER'
+                div.title = iscorrect2 ? '[LANG_CORRECT_ANSWER]' : '[LANG_WRONG_ANSWER]'
             }
         }
 
@@ -496,6 +496,9 @@ var t0 = performance.now()
     }
 
     show_score( json) {
+        json.percentcompleted = 0.27
+        json.sumscore = 14
+        
         let rank = json.rank
         let rankc = json.completedrank
         if( rank != undefined && rankc != undefined) {
@@ -542,15 +545,14 @@ var t0 = performance.now()
                 if( rank1 <= rank2) {
                     rank = '#' + rank1
                     score = json.aduel_score
-                    this.labelScore2.title = 'LANG_GRADE'
-                    this.labelScoreRank2.title = "LANG_POSITION_GRADE"
+                    this.labelScore2.title = '[LANG_GRADE]'
+                    this.labelScoreRank2.title = "[LANG_POSITION_GRADE]"
                 } else {
                     rank = '#' + rank2
                     score = Math.round( 100 * json.aduel_completedrank) + "%"
-                    this.labelScore2.title = "LANG_PERCENT_OPONENT"
-                    this.labelScoreRank2.title = "LANG_POSITION_PERCENT"
+                    this.labelScore2.title = "[LANG_PERCENT_OPONENT]"
+                    this.labelScoreRank2.title = "[LANG_POSITION_PERCENT]"
                 }
-            
             }
             let s = '<b>' + score + '</b>'
             if( this.labelScore2.innerHTML != s) {
@@ -583,8 +585,6 @@ var t0 = performance.now()
         }
         
         if( newstate != this.state || newTimeFastJSON != this.timefastjson) {
-            
-console.log( "CHANGE " + "newstate=" + newstate + " this.state=" + this.state + " newTimeFastJSON=" + newTimeFastJSON + " vs " + this.timefastjson + " a=" + a + " response=" + response + " a.lenth=" + a.length)
             return this.sendGetAttempt()
         }
 
@@ -668,9 +668,9 @@ console.log( "CHANGE " + "newstate=" + newstate + " this.state=" + this.state + 
     
     drawHighScore1( json, ctx, fontSize) {
         ctx.textAlign = "center";
-        let text1 = ctx.measureText("LANG_RANKING_ORDER");
+        let text1 = ctx.measureText("[LANG_RANKING_ORDER]");
         let width1 = text1.width
-        let text = ctx.measureText("LANG_GRADE");
+        let text = ctx.measureText("[LANG_GRADE]");
         let width2 = text.width
         
         let line = this.areaHeight / json.count
@@ -687,13 +687,12 @@ console.log( "CHANGE " + "newstate=" + newstate + " this.state=" + this.state + 
         let avatars = json.avatars.split( '#')
 
         ctx.fillStyle = this.getColorContrast( this.colorBackground)
-        console.log( "padding=" + this.padding + " fontSize=" + fontSize + " (" + this.minFontSize + "  - " + this.maxFontSize + ")")
 
         let y = Math.round( fontSize * 1.2)
-        ctx.fillText( "LANG_RANKING_ORDER", col1 + width1 / 2, y)
-        ctx.fillText( "LANG_GRADE", col2 + width2 / 2, y)
+        ctx.fillText( "[LANG_RANKING_ORDER]", col1 + width1 / 2, y)
+        ctx.fillText( "[LANG_GRADE]", col2 + width2 / 2, y)
         ctx.textAlign = "left";
-        ctx.fillText( "LANGM_NAME", col3, y)
+        ctx.fillText( "[LANGM_NAME]", col3, y)
         for( let i = 1; i <= json.count; i++) { 
             y += row / 2 + this.padding
 
@@ -716,11 +715,11 @@ console.log( "CHANGE " + "newstate=" + newstate + " this.state=" + this.state + 
     
     drawHighScore2( json, ctx, fontSize, left, top) {
         ctx.textAlign = "center";
-        let text = ctx.measureText("LANGM_DATE");
+        let text = ctx.measureText("[LANGM_DATE]");
         let width1 = text.width
-        text = ctx.measureText("LANG_GRADE");
+        text = ctx.measureText("[LANG_GRADE]");
         let width2 = text.width
-        
+
         let line = this.areaHeight / json.count
         let width3 = this.areaWith - width1 - width2
         let col1 = 0
@@ -734,10 +733,10 @@ console.log( "CHANGE " + "newstate=" + newstate + " this.state=" + this.state + 
         let avatars = json.avatars.split( '#')
 
         ctx.fillStyle = this.getColorContrast( this.colorBackground)
-        ctx.fillText( "LANGM_DATE", col1 + width1 / 2, top + row)
-        ctx.fillText( "LANGM_GRADE", col2 + width2 / 2, top + row)
+        ctx.fillText( "[LANGM_DATE]", col1 + width1 / 2, top + row)
+        ctx.fillText( "[LANGM_GRADE]", col2 + width2 / 2, top + row)
         ctx.textAlign = "left";
-        ctx.fillText( "LANGM_NAME", col3, top + row)
+        ctx.fillText( "[LANGM_NAME]", col3, top + row)
             
         for( let i = 1; i <= json.count; i++) {
             let y = top + (i + 1) * row
@@ -755,6 +754,38 @@ console.log( "CHANGE " + "newstate=" + newstate + " this.state=" + this.state + 
     }
     
     showHelpScreen( div, width, height) {
-        div.innerHTML = 'Hellob<?php echo 1;?>';
+        div.innerHTML = `
+<div>[LANG_ADUEL_HELP]</div>
+
+<table border=1>
+    <tr>
+        <td><center>
+            <img height="90" src="assets/cutred.svg" alt="" />
+        </td>
+        <td>[LANG_ADUEL_CUT]</td>
+        <td><center>
+            <img height="90" src="assets/skip.svg" alt="" />
+        </td>
+        <td>[LANG_ADUEL_SKIP]</td>
+        <td><center>
+            <img height="90" src="assets/wizard.svg" alt="" />
+        </td>
+        <td>[LANG_ADUEL_WIZARD]</td>
+    </tr>
+
+    <tr>
+        <td><center>
+            <img height="90" src="type/quiz/assets/aduel/example1.png" alt="" />
+        </td><center>
+
+        <td>[LANG_ADUEL_EXAMPLE1]</td>
+        <td><center>
+            <img height="90" src="type/quiz/assets/aduel/example2.png" alt="" />
+        </td>
+
+        <td>[LANG_ADUEL_EXAMPLE2]</td>
+    </tr>
+</table>        
+        `;
     }
 }

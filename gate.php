@@ -58,7 +58,7 @@ $color = $DB->get_record_select( 'mmogame_aa_colorpalettes', 'id=?', [2]);
 $colors = "[$color->color1, $color->color2, $color->color3, $color->color4, $color->color5]";
 
 $pin = required_param('pin', PARAM_INT);
-$usercode = '1';
+$usercode = $instance->kinduser == 'moodle' ? $USER->id : '';
 
 echo "<script src=\"js/google.fastbutton.js\" async> </script>";
 

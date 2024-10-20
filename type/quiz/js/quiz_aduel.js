@@ -119,7 +119,6 @@ class mmogame_quiz_aduel extends mmogame_quiz {
     }
 
     onServerGetAttempt( json, param) {
-var t0 = performance.now()
         if( this.buttonHighScore != undefined) {
             this.buttonHighScore.style.visibility = 'hidden'
         }

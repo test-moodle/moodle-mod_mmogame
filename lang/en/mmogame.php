@@ -95,6 +95,7 @@ $string['js_date'] = 'Date';
 $string['js_grade'] = 'Grade';
 $string['js_grade_oponent'] = "Oponents' grade";
 $string['js_name'] = 'Name';
+$string['js_avatars'] = 'Avatars';
 $string['js_code'] = 'Code';
 $string['js_palette'] = 'Color palette';
 $string['js_game_over'] = 'Game over';

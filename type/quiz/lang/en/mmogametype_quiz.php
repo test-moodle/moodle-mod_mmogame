@@ -30,8 +30,8 @@ $string['algorithm_adaptive'] = 'Adaprive';
 $string['algorithm_random'] = 'Random';
 
 // Lib.php.
-$string['model_alone'] = 'Alone';
-$string['model_aduel'] = 'Aduel';
+$string['model_alone'] = 'Quiz - Alone';
+$string['model_aduel'] = 'Quiz - ADuel';
 
 // Mod_form.php.
 $string['showcorrect'] = 'Show correct answer';
@@ -40,22 +40,20 @@ $string['showcorrect'] = 'Show correct answer';
 
 // JS Aduel.
 $string['waittostart'] = 'Waiting for game to start';
-$string['help_aduel_cut'] = 'It only shows two answers to choose from.';
-$string['help_aduel_skip'] = 'Skips the question.';
-$string['help_aduel_wizard'] = 'It shows the correct answer but the player will earn 1 point less.';
-$string['help_aduel_example1'] = 'The player answered incorrectly while his opponent answered correctly.';
-$string['help_aduel_example2'] = 'The player has Rank 1 in the game with 14 points and a correct answer rate of 27%.';
-
-// Help.
-$string['help_aduel'] = 'Each player initially answers 4 questions of increasing difficulty and earns 3 points if his answer is correct and loses 1 point for each wrong answer.<br>
-Another player then answers the same questions.<br>
-If only one of the two answered a question correctly, he gets an extra 3 points.';
+$string['js_aduel_cut'] = 'It only shows two answers to choose from.';
+$string['js_aduel_skip'] = 'Skips the question.';
+$string['js_aduel_wizard'] = 'It shows the correct answer but the player will earn 1 point less.';
+$string['js_aduel_example1'] = 'The player answered incorrectly while his opponent answered correctly.';
+$string['js_aduel_example2'] = 'The player has Rank 1 in the game with 14 points and a correct answer rate of 27%.';
 
 $string['state0'] = 'Wait to start';
 $string['alone_state1'] = 'Playing the game';
 $string['aduel_state1'] = 'Playing the game';
 
 // Java script.
+$string['js_aduel_help'] = 'Each player initially answers 4 questions of increasing difficulty and earns 3 points if his answer is correct and loses 1 point for each wrong answer.<br>
+Another player then answers the same questions.<br>
+If only one of the two answered a question correctly, he gets an extra 3 points.';
 $string['js_help_5050'] = 'Shows only 2 possible answers';
 $string['js_help_skip'] = 'Skip the question';
 $string['js_wizard'] = 'Revealing the correct answer will cost you 1 mark';

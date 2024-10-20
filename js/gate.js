@@ -2,7 +2,7 @@ class mmogame_gate extends mmogame {
     open(url, mmogameid, pin, auserid, kinduser) {
         this.minFontSize *= 2
         this.maxFontSize *= 2
-        
+
         this.url = url
         this.mmogameid = mmogameid
         this.pin = pin
@@ -16,13 +16,23 @@ class mmogame_gate extends mmogame {
         this.areaWidth = Math.round( window.innerWidth - 2 * this.padding)
         this.areaHeight = Math.round( window.innerHeight - this.areaTop) - this.padding
 
-        if( localStorage.getItem("auserid") !== null && localStorage.getItem("nickname") !== null) {
-            let avatarid = parseInt( localStorage.getItem("avatarid"))
-            let paletteid = parseInt( localStorage.getItem("paletteid"))
-            this.playgame(localStorage.getItem("auserid"), localStorage.getItem("nickname"), paletteid, avatarid)
-            return
+        switch( kinduser) {
+            case 'moodle':
+                if( localStorage.getItem("nickname") !== null && localStorage.getItem("avatarid") !== null && localStorage.getItem("paletteid") !== null) {
+                    let avatarid = parseInt( localStorage.getItem("avatarid"))
+                    let paletteid = parseInt( localStorage.getItem("paletteid"));
+                    this.playgame( auserid, localStorage.getItem("nickname"), paletteid, avatarid)
+                }
+                break;
+            case 'guid':
+                if( localStorage.getItem("auserid") !== null && localStorage.getItem("nickname") !== null && localStorage.getItem("avatarid") !== null && localStorage.getItem("paletteid") !== null) {
+                    let avatarid = parseInt( localStorage.getItem("avatarid"))
+                    let paletteid = parseInt( localStorage.getItem("paletteid"));
+                    this.playgame( localStorage.getItem("auserid"), localStorage.getItem("nickname"), paletteid, avatarid)
+                }
+                break;
         }
-
+        
         this.createScreen()
     }
 
@@ -56,7 +66,7 @@ class mmogame_gate extends mmogame {
             if( size[ 0] >= maxWidth) { 
                 return 1
             }
-            let heightCode = instance.kinduser != 'guid' ? size[ 1] + instance.padding : 0
+            let heightCode = instance.kinduser != 'guid' && instance.kinduser != 'moodle' ? size[ 1] + instance.padding : 0
             
             let heightColors = (maxHeight - 4 * fontSize) * 2 / 5
             let n = Math.floor( heightColors / instance.iconSize)
@@ -83,14 +93,14 @@ class mmogame_gate extends mmogame {
         let gridHeightAvatars = (maxHeight - 4 * this.fontSize + rest) * 3 / 5
 
         let bottom
-        if( this.kinduser != 'guid') {
+        if( this.kinduser != 'guid' && this.kinduser != 'moodle') {
             bottom = this.createCode( 0, 0, maxWidth, this.fontSize, size[ 0])
             this.edtCode = this.edt
             this.edtCode.addEventListener("keyup", function(){ instance.updateSubmit()})              
         } else {
             bottom = 0
         }
-        bottom = this.createLabelEditVertical( 0, bottom, newWidth - 2 * this.padding, this.fontSize, size[ 0], "Όνομα: ") + 2 * this.padding
+        bottom = this.createLabelEditVertical( 0, bottom, newWidth - 2 * this.padding, this.fontSize, size[ 0], "[LANGM_NAME]: ") + 2 * this.padding
         this.edtNickname = this.edt
         this.edtNickname.addEventListener("keyup", function(){ instance.updateSubmit()})              
         
@@ -98,7 +108,7 @@ class mmogame_gate extends mmogame {
         
         let label1 = document.createElement( "label")
         label1.style.position = "absolute"
-        label1.innerHTML =  "Χρωματική παλέτα"
+        label1.innerHTML =  "[LANGM_PALETTE]"
         label1.style.font = "FontAwesome"
         label1.style.fontSize = this.fontSize + "px"
         label1.style.width = "0px";
@@ -125,7 +135,7 @@ class mmogame_gate extends mmogame {
 
         let label = document.createElement( "label")
         label.style.position = "absolute"
-        label.innerHTML =  "Avatars"
+        label.innerHTML =  "[LANGM_AVATARS]"
         label.style.font = "FontAwesome"
         label.style.fontSize = this.fontSize + "px"
         label.style.width = "0 px"
@@ -154,8 +164,8 @@ class mmogame_gate extends mmogame {
                                            0, bottom + gridHeightColors + this.fontSize + this.padding, gridWidthAvatars, gridHeightAvatars)
         
         let bottom2 = bottom + gridHeightColors + this.fontSize + this.padding + gridHeightAvatars;
-        this.btnSubmit = this.createImageButton( this.area, (maxWidth - this.iconSize) / 2, bottom2, 0, this.iconSize,
-            "", 'assets/submit.svg', false, 'submit')
+        this.btnSubmit = this.createImageButton( this.area, (maxWidth - this.iconSize) / 2, bottom2, 0,
+            this.iconSize, "", 'assets/submit.svg', false, 'submit')
         this.btnSubmit.style.visibility = 'hidden'
         this.btnSubmit.addEventListener("click", function(){ instance.playgame( instance.edtCode == undefined ? 0 : instance.edtCode.value, instance.edtNickname.value, instance.paletteid, instance.avatarid)})     
     }
@@ -172,7 +182,7 @@ class mmogame_gate extends mmogame {
             if( size[ 0] >= maxWidth) { 
                 return 1
             }
-            let heightCode = instance.kinduser != 'guid' ? size[ 1] + instance.padding : 0
+            let heightCode = instance.kinduser != 'guid' && instance.kinduser != 'moodle' ? size[ 1] + instance.padding : 0
             
             let heightColors = (maxHeight - 4 * fontSize) * 2 / 5
             let n = Math.floor( heightColors / instance.iconSize)
@@ -197,14 +207,14 @@ class mmogame_gate extends mmogame {
         let gridHeightAvatars = Math.floor( (maxHeight - 4 * this.fontSize) * 3 / 5 + rest)
 
         let bottom
-        if( this.kinduser != 'guid') {
+        if( this.kinduser != 'guid' && this.kinduser != 'moodle') {
             bottom = this.createCode( 0, 0, maxWidth, this.fontSize, size[ 0])
             this.edtCode = this.edt
             this.edtCode.addEventListener("keyup", function(){ instance.updateSubmit()})              
         } else {
             bottom = 0
         }
-        let sizeLabel = this.computeLabelSize( this.fontSize, ['Όνομα: '])
+        let sizeLabel = this.computeLabelSize( this.fontSize, ['[LANGM_NAME]: '])
         bottom = this.createLabelEdit( 0, bottom, newWidth - 2 * this.padding, this.fontSize, sizeLabel[ 0], "[LANGM_NAME]: ")
 
         this.edtNickname = this.edt
@@ -241,7 +251,7 @@ class mmogame_gate extends mmogame {
 
         let label = document.createElement( "label")
         label.style.position = "absolute"
-        label.innerHTML =  "Avatars"
+        label.innerHTML =  "[LANGM_AVATARS]"
         label.style.font = "FontAwesome"
         label.style.fontSize = this.fontSize + "px"
         label.style.width = "0 px"
@@ -271,8 +281,8 @@ class mmogame_gate extends mmogame {
                                            0, bottom + gridHeightColors + this.fontSize + this.padding, gridWidthAvatars, gridHeightAvatars)
         
         let bottom2 = bottom + gridHeightColors + this.fontSize + this.padding + gridHeightAvatars;
-        this.btnSubmit = this.createImageButton( this.area, (maxWidth - this.iconSize) / 2, bottom2, 0, this.iconSize,
-            "", 'assets/submit.svg', false, 'submit')
+        this.btnSubmit = this.createImageButton( this.area, (maxWidth - this.iconSize) / 2, bottom2, 0,
+            this.iconSize, "", 'assets/submit.svg', false, 'submit')
         this.btnSubmit.style.visibility = 'hidden'
         this.btnSubmit.addEventListener("click", function(){ instance.playgame( instance.edtCode == undefined ? 0 : instance.edtCode.value, instance.edtNickname.value, instance.paletteid, instance.avatarid)})     
     }
@@ -384,11 +394,11 @@ class mmogame_gate extends mmogame {
     }
     
     createCode( left, top, width, fontSize, labelWidth) {
-        return this.createLabelEdit( left, top, width, fontSize, labelWidth, "Κωδικός: ")
+        return this.createLabelEdit( left, top, width, fontSize, labelWidth, "[LANGM_CODE]: ")
     }
     
     createNickName( left, top, width, fontSize, labelWidth) {
-        return this.createLabelEdit( left, top, width, fontSize, labelWidth, "Όνομα: ")
+        return this.createLabelEdit( left, top, width, fontSize, labelWidth, "[LANGM_NAME]: ")
     }  
     
     showAvatars( json, left, top, width, height, countX, countY) {
@@ -398,8 +408,8 @@ class mmogame_gate extends mmogame {
         let instance = this 
         let w = Math.round( this.padding / 2) + "px"
         for(let i = 0; i < json.countavatars; i++) {
-            let btn = this.createCenterImageButton( this.area, left, top, this.iconSize - this.padding, this.iconSize - this.padding, "",
-                'assets/avatars/' + json[ 'avatar' + (i + 1)])
+            let btn = this.createCenterImageButton( this.area, left, top, this.iconSize - this.padding,
+                this.iconSize - this.padding, "", 'assets/avatars/' + json[ 'avatar' + (i + 1)])
             btn.classList.add( "mmogame_avatar")
             let id = json[ 'avatarid' + (i + 1)]
             btn.addEventListener("click",
@@ -563,7 +573,6 @@ class mmogame_gate extends mmogame {
     }
     
     playgame(auserid, nickname, paletteid, avatarid) {
-
         if( auserid == 0 && this.kinduser == 'guid') {
             auserid = this.getUserGUID()
         }
@@ -585,6 +594,7 @@ class mmogame_gate extends mmogame {
         let d = { "command": "getattempt", "mmogameid": this.mmogameid, "pin" : this.pin, "kinduser" : this.kinduser,
             "user": auserid, "nickname" : nickname, "paletteid" : paletteid, "avatarid" : avatarid,
             "maxwidth" : this.maxImageWidth, "maxheight": this.maxImageHeight}
+            console.log(d)
         if( this.helpurl == undefined) {
             d[ 'helpurl'] = 1
         }
@@ -595,10 +605,11 @@ class mmogame_gate extends mmogame {
     onServerGetAttempt( json, auserid) {
         if( json.errorcode != undefined ) {
             if( json.errorcode == 'invalidauser') {
-                alert( "Λάθος κωδικός παίκτη " + auserid)
+                console.log( json.errorcode  + " " + auserid)
+                alert( json.errorcode  + " " + auserid)
                 return
             } else if( json.errorcode != 'aduel_no_rivals') {
-                alert( "Πρόβλημα " + json.errorcode + "#")
+                alert( "Problem " + json.errorcode + "#")
             }
         }
         

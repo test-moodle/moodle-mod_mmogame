@@ -31,7 +31,6 @@ class mmogame {
         this.minFontSize = size
         this.maxFontSize = 2 * size
         this.fontSize = size
-        console.log( "mmogame minFontSize=" + this.minFontSize + " maxFontSize=" + this.maxFontSize)
     }
     
     hasHelp() {
@@ -692,30 +691,6 @@ class mmogame {
         }
 
         return aButton
-    }
-
-    say( text) {
-
-        if( this.kindSound != 2) {
-            return
-        }
-
-        var msg = new SpeechSynthesisUtterance();
-        var voices = window.speechSynthesis.getVoices();
-        msg.voice = voices[ 0]; // Note: some voices don't support altering params
-        msg.voiceURI = 'native'
-        msg.text = text
-        msg.lang = this.language
-        msg.onend = function(e) {
-            console.log('Finished in ' + event.elapsedTime + ' seconds.');
-        };
-
-        speechSynthesis.speak( msg)
-    }
-
-    say_alert( text) {
-        this.say( text)
-        alert( text)
     }
 
     repairHTML( s, mapFiles, mapFilesWidth, mapFilesHeight) {
@@ -1693,8 +1668,6 @@ class mmogame {
         
         let temp_time = (new Date()).getTime() / 1000
         let temp_rest = this.timeclose - temp_time
-        console.log( "difClock=" + this.difClock + " json.time=" + json.time + " json=(" + json.timestart + " # " + json.timeclose + " )" + 
-            " local.time=(" + this.timestart + " # " + this.timeclose + ") time=" + temp_time + " rest=" + temp_rest)
     }
 
     changeToDisabledCheckRadio( item, color1, color2) {

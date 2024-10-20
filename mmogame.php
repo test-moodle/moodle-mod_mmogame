@@ -209,9 +209,9 @@ class mmogame {
                 return self::get_auserid_from_usercode( $db, $data->user, $instance);
             } else if ($data->kinduser == 'guid') {
                 return self::get_auserid_from_guid( $db, $data->user, $instance);
-            }
-        } else if (isset( $data->muserid)) {
-            return self::get_auserid_from_db( $db, 'moodle', $data->muserid, true);
+            } else if( $data->kinduser == 'moodle') {
+                return self::get_auserid_from_db( $db, 'moodle', $data->user, true);
+            }           
         } else {
             return self::get_auserid_from_guid( $db, $data->user, true);
         }

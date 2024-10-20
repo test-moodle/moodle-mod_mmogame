@@ -22,6 +22,7 @@ class mmogame_gate extends mmogame {
                     let avatarid = parseInt( localStorage.getItem("avatarid"))
                     let paletteid = parseInt( localStorage.getItem("paletteid"));
                     this.playgame( auserid, localStorage.getItem("nickname"), paletteid, avatarid)
+                    return
                 }
                 break;
             case 'guid':
@@ -29,6 +30,7 @@ class mmogame_gate extends mmogame {
                     let avatarid = parseInt( localStorage.getItem("avatarid"))
                     let paletteid = parseInt( localStorage.getItem("paletteid"));
                     this.playgame( localStorage.getItem("auserid"), localStorage.getItem("nickname"), paletteid, avatarid)
+                    return
                 }
                 break;
         }

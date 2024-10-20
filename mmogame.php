@@ -209,9 +209,9 @@ class mmogame {
                 return self::get_auserid_from_usercode( $db, $data->user, $instance);
             } else if ($data->kinduser == 'guid') {
                 return self::get_auserid_from_guid( $db, $data->user, $instance);
-            } else if( $data->kinduser == 'moodle') {
+            } else if ($data->kinduser == 'moodle') {
                 return self::get_auserid_from_db( $db, 'moodle', $data->user, true);
-            }           
+            }
         } else {
             return self::get_auserid_from_guid( $db, $data->user, true);
         }
@@ -263,7 +263,7 @@ class mmogame {
 
         $class = 'mmogame_'.$rinstance->type;
         return $class::get_new($db, $rgame, $rinstance);
-    }  
+    }
 
     public function json_items_table( $table, $mainid, $data, &$ret) {
         $recs = $this->db->get_records_select( $table, 'mainid=?', [$mainid]);

@@ -1253,13 +1253,12 @@ class mmogame {
             div.style.paddingRight = this.padding + "px"
 
             div.style.color = this.getColorContrast( this.colorDefinition)
-            let top = this.iconSize + 2 * this.padding + height1
+            let top = this.iconSize + 3 * this.padding + height1
             div.style.top = (top + this.padding) + "px"
             div.style.height = (height - height1) + "px"
             this.divMessageHelp = div
             this.body.appendChild( this.divMessageHelp)
 
-            // read text from URL location
             this.showHelpScreen( div, (width - 2 * this.padding), (height - height1))           
         }
     }

@@ -87,10 +87,10 @@ function mmogame_change_javascript( $file) {
 
     // Start from [LANG and finish with ].
     preg_match_all('/\[LANG_[A-Z0-9_]+\]/', $s, $matches);
-    
+
     foreach ($matches as $stringm) {
-        foreach( $stringm as $string) {
-            $source[] = $string; 
+        foreach ($stringm as $string) {
+            $source[] = $string;
             $name = 'js_'.strtolower( substr( trim($string, '[]'), 5));
             $dest[] = get_string( $name, 'mmogametype_'.$instance->type);
         }
@@ -99,9 +99,9 @@ function mmogame_change_javascript( $file) {
     // Start from [LANGM (for whole module) and finish with ].
     preg_match_all('/\[LANGM_[A-Z0-9_]+\]/', $s, $matches);
     foreach ($matches as $stringm) {
-        foreach( $stringm as $string) {
+        foreach ($stringm as $string) {
             $source[] = $string;
-            $name = 'js_'.strtolower( substr( trim($string, '[]'), 6)); 
+            $name = 'js_'.strtolower( substr( trim($string, '[]'), 6));
             $dest[] = get_string( $name, 'mmogame');
         }
     }

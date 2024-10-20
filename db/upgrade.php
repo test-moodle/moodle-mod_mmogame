@@ -44,7 +44,5 @@ function xmldb_mmogame_upgrade( $oldversion) {
 
     $dbman = $DB->get_manager();
 
-
-
     return true;
 }

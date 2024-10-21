@@ -24,12 +24,13 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['group'] = 'Group';
+
 $string['modulename'] = 'Multiple Player Online Game';
 $string['modulename_help'] = 'This module contains multiple player online games';
 $string['modulenameplural'] = 'MMOGames';
 $string['subplugintype_mmogametype'] = 'MMOGame';
 $string['subplugintype_mmogametype_plural'] = 'MMOGames';
-$string['pluginadministration'] = 'MMOGame administration';
 $string['pluginname'] = 'MMOGame';
 $string['sourcemodule'] = 'Source of questions';
 
@@ -41,7 +42,6 @@ $string['subplugintype_mmogameform'] = 'Grading strategy';
 $string['subplugintype_mmogameform_plural'] = 'Grading strategies';
 
 // Mmogame.php.
-$string['group'] = 'Group';
 $string['type'] = 'Type';
 
 // Mod_form.php.
@@ -57,7 +57,6 @@ $string['countgroup'] = 'Number of groups';
 $string['enrolmentkey'] = 'Enrolement key';
 $string['groupname'] = 'Group name';
 $string['enrolmentkey'] = 'Enrolment key';
-$string['sourcemodule'] = 'Source of questions';
 $string['sourcemodule_glossary'] = 'Select glossary';
 $string['sourcemodule_question'] = 'Questions';
 $string['sourcemodule_none'] = 'Without questions';
@@ -95,9 +94,11 @@ $string['import_completed'] = 'Έγινε εισαγωγή {$a} ερωτήσεω
 $string['js_date'] = 'Date';
 $string['js_grade'] = 'Grade';
 $string['js_grade_oponent'] = "Oponents' grade";
+$string['js_help'] = 'Help';
 $string['js_name'] = 'Name';
 $string['js_avatars'] = 'Avatars';
 $string['js_code'] = 'Code';
+$string['js_oponent'] = 'Oponent';
 $string['js_palette'] = 'Color palette';
 $string['js_game_over'] = 'Game over';
 $string['js_percent'] = 'Percent';
@@ -107,9 +108,8 @@ $string['js_ranking_grade'] = 'Ranking order based on score';
 $string['js_ranking_percent'] = 'Ranking order based on the percentage of correct answers';
 $string['js_grade_last_question'] = 'Last question marks';
 $string['js_percent'] = 'Percentage of correct answers';
+$string[ 'pluginadministration'] = 'MMOGame administration';
 $string['js_question_time'] = 'Question time';
 $string['js_sound'] = 'Sound';
-
-// Admin.
 $string['numgame'] = 'Number of game';
 $string['state'] = 'State';

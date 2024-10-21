@@ -34,7 +34,7 @@
 /**
  * This code run after the installation of MMOGame module and fills tables avatars and colorpalettes.
  *
- * @package    mod_game
+ * @package    mod_mmogame
  * @copyright  2024 Vasilis Daloukas
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

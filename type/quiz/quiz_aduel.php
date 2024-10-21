@@ -19,7 +19,7 @@
 /**
  * mmogame_quiz_aduel class
  *
- * @package    mmogame_quiz
+ * @package    mmogametype_quiz
  * @copyright  2024 Vasilis Daloukas
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -33,7 +33,7 @@ class mmogame_quiz_aduel extends mmogame_quiz_alone {
     protected $aduel = false;
     protected $maxalone = 200;
 
-    public function __construct( $db, $rgame, $rinstance) {
+    public function __construct($db, $rgame, $rinstance) {
         $rgame->usemultichoice = true;
 
         parent::__construct( $db, $rgame, $rinstance);
@@ -49,7 +49,7 @@ class mmogame_quiz_aduel extends mmogame_quiz_alone {
         $this->callupdategrades = true;
     }
 
-    public function set_attempt( $attempt) {
+    public function set_attempt($attempt) {
         $this->aduel = $this->db->get_record_select( 'mmogame_am_aduel_pairs', 'id=?', [$attempt->numteam]);
     }
 
@@ -153,7 +153,7 @@ class mmogame_quiz_aduel extends mmogame_quiz_alone {
         return $this->db->get_record_select( $table, 'id=?', [$ret]);
     }
 
-    public function set_answer( $attempt, $query, $useranswer, $autograde, $submit, &$ret) {
+    public function set_answer($attempt, $query, $useranswer, $autograde, $submit, &$ret) {
         $retvalue = parent::set_answer( $attempt, $query, $useranswer, $autograde, $submit, $ret);
         if (!$submit) {
             return $retvalue;
@@ -221,7 +221,7 @@ class mmogame_quiz_aduel extends mmogame_quiz_alone {
         return $retvalue;
     }
 
-    public function append_json( &$ret, $attempt, $data) {
+    public function append_json(&$ret, $attempt, $data) {
         $query = parent::append_json( $ret, $attempt, $data);
 
         $auserid = $this->get_auserid();
@@ -305,11 +305,11 @@ class mmogame_quiz_aduel extends mmogame_quiz_alone {
         }
     }
 
-    public function iswizard( $attemptid) {
+    public function iswizard($attemptid) {
         return $attemptid % (2 * $this->numquestions) == 0;
     }
 
-    protected function append_json_only2( &$ret, $query, $attemptid) {
+    protected function append_json_only2(&$ret, $query, $attemptid) {
         $correctid = $query->correctid;
         $ids = [];
         foreach ($query->answers as $answer) {
@@ -331,7 +331,7 @@ class mmogame_quiz_aduel extends mmogame_quiz_alone {
         }
     }
 
-    protected function append_json_only1( &$ret, $query, $attemptid) {
+    protected function append_json_only1(&$ret, $query, $attemptid) {
         $correctid = $query->correctid;
 
         $count = $ret['answers'];
@@ -344,7 +344,7 @@ class mmogame_quiz_aduel extends mmogame_quiz_alone {
         }
     }
 
-    public function get_queries_aduel( $count, $mostused) {
+    public function get_queries_aduel($count, $mostused) {
         // Get the ids of all the queries.
         $ids = $this->qbank->get_queries_ids();
         if ($ids === false) {
@@ -451,7 +451,7 @@ class mmogame_quiz_aduel extends mmogame_quiz_alone {
         return count( $ret) ? $ret : false;
     }
 
-    public function get_queries_aduel_method1_blocks( $count, $mostused) {
+    public function get_queries_aduel_method1_blocks($count, $mostused) {
         // Get the ids of all the queries.
         $ids = $this->qbank->get_queries_ids();
         if ($ids === false) {
@@ -515,7 +515,7 @@ class mmogame_quiz_aduel extends mmogame_quiz_alone {
         return count( $ret) ? $ret : false;
     }
 
-    private function get_queries_aduel_blocks( $count, $qs) {
+    private function get_queries_aduel_blocks($count, $qs) {
         $qsort = [];
         // I split question in groups dependly on percent on all users.
         foreach ($qs as $q) {
@@ -550,7 +550,7 @@ class mmogame_quiz_aduel extends mmogame_quiz_alone {
         return $ret;
     }
 
-    public function get_queries_aduel_blocks_one( $block) {
+    public function get_queries_aduel_blocks_one($block) {
         $t = [];
 
         foreach ($block as $q) {

@@ -101,7 +101,7 @@ class mod_mmogame_mod_form extends moodleform_mod {
         $this->add_action_buttons();
     }
 
-    protected function definition_models( $mform) {
+    protected function definition_models($mform) {
         global $CFG;
 
         $dir = __DIR__.'/type';
@@ -259,7 +259,7 @@ class mod_mmogame_mod_form extends moodleform_mod {
      *
      * @param array $defaultvalues
      */
-    public function set_data( $defaultvalues) {
+    public function set_data($defaultvalues) {
         global $DB;
 
         $mmogameid = isset( $defaultvalues->id) ? $defaultvalues->id : 0;
@@ -289,7 +289,7 @@ class mod_mmogame_mod_form extends moodleform_mod {
         parent::set_data($defaultvalues);
     }
 
-    public function set_data_categories( &$defaultvalues) {
+    public function set_data_categories(&$defaultvalues) {
         global $CFG, $DB;
 
         if (!isset( $defaultvalues->instance)) {
@@ -336,7 +336,7 @@ class mod_mmogame_mod_form extends moodleform_mod {
      *
      * @return array of glossary categories
      */
-    public function get_array_glossary_categories( $a) {
+    public function get_array_glossary_categories($a) {
         global $CFG, $DB;
 
         if (count( $a) == 0) {
@@ -384,7 +384,7 @@ class mod_mmogame_mod_form extends moodleform_mod {
      * @return array of question categories
      */
 
-    public function definition_question( &$mform) {
+    public function definition_question(&$mform) {
         $numcategories = 3;
 
         for ($i = 1; $i <= $numcategories; $i++) {
@@ -395,7 +395,7 @@ class mod_mmogame_mod_form extends moodleform_mod {
         }
     }
 
-    public function definition_glossary( &$mform) {
+    public function definition_glossary(&$mform) {
         global $DB, $COURSE, $CFG;
 
         $a = [];
@@ -422,7 +422,7 @@ class mod_mmogame_mod_form extends moodleform_mod {
     }
 }
 
-function mmogamekind_set_data_group( &$defaultvalues) {
+function mmogamekind_set_data_group(&$defaultvalues) {
     global $DB;
 
     $mmogameid = $defaultvalues->id;
@@ -445,7 +445,7 @@ function mmogamekind_set_data_group( &$defaultvalues) {
  *
  * @param array $defaultvalues
  */
-function mmogamekind_set_data( $kind, &$defaultvalues) {
+function mmogamekind_set_data($kind, &$defaultvalues) {
     global $DB;
 
     if (isset( $defaultvalues->id)) {
@@ -465,7 +465,7 @@ function mmogamekind_set_data( $kind, &$defaultvalues) {
     }
 }
 
-function mmogamekind_form_definition_add_kindgroup( $gameform, $mform, $kind, $title=false, $new=false) {
+function mmogamekind_form_definition_add_kindgroup($gameform, $mform, $kind, $title=false, $new=false) {
     global $DB;
 
     $options = [];
@@ -510,7 +510,7 @@ function mmogamekind_form_definition_add_kindgroup( $gameform, $mform, $kind, $t
     }
 }
 
-function mmogame_get_list_users( $courseid) {
+function mmogame_get_list_users($courseid) {
     global $CFG, $DB;
 
     $context = context_course::instance( $courseid);

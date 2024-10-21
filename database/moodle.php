@@ -38,7 +38,7 @@ class mmogame_database_moodle extends mmogame_database {
         $this->prefix = $CFG->prefix;
     }
 
-    public function insert_record( $table, $a) {
+    public function insert_record($table, $a) {
         global $DB;
 
         $rec = new StdClass;
@@ -48,7 +48,7 @@ class mmogame_database_moodle extends mmogame_database {
         return $DB->insert_record( $table, $rec);
     }
 
-    public function insert_record_raw( $table, $a, $returnid, $customsequence) {
+    public function insert_record_raw($table, $a, $returnid, $customsequence) {
         global $DB;
 
         $rec = new StdClass;
@@ -58,7 +58,7 @@ class mmogame_database_moodle extends mmogame_database {
         return $DB->insert_record_raw( $table, $rec, $returnid, false, $customsequence);
     }
 
-    public function execute( $sql, $params=null) {
+    public function execute($sql, $params=null) {
         global $DB;
 
         $DB->execute( $sql, $params);
@@ -121,7 +121,7 @@ class mmogame_database_moodle extends mmogame_database {
         $DB->delete_records_select($table, $select, $params);
     }
 
-    public function iif( $condition, $iftrue, $iffalse) {
+    public function iif($condition, $iftrue, $iffalse) {
         return "IF($condition,$iftrue,$iffalse)";
     }
 }

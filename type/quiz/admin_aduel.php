@@ -19,7 +19,7 @@
 /**
  * mmogame_quiz_aduel_admin class
  *
- * @package    mmogame_quiz
+ * @package    mmogametype_quiz
  * @copyright  2024 Vasilis Daloukas
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

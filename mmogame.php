@@ -51,7 +51,7 @@ class mmogame {
     protected $rstate;
     protected $params;
 
-    public function __construct( $db, $rgame, $rinstance) {
+    public function __construct($db, $rgame, $rinstance) {
         $this->db = $db;
         $this->rgame = $rgame;
 
@@ -92,7 +92,7 @@ class mmogame {
         return $this->params;
     }
 
-    public function set_debugfraction( $set) {
+    public function set_debugfraction($set) {
         $this->debugfraction = $set;
     }
 
@@ -100,11 +100,11 @@ class mmogame {
         return $this->debugfraction;
     }
 
-    public function set_errorcode( $code) {
+    public function set_errorcode($code) {
         $this->error = $code;
     }
 
-    public function set_attempt( $attempt) {
+    public function set_attempt($attempt) {
 
     }
 
@@ -160,7 +160,7 @@ class mmogame {
         return $this->auserid;
     }
 
-    public static function get_auserid_from_guid( $db, $guid, $create) {
+    public static function get_auserid_from_guid($db, $guid, $create) {
         $rec = $db->get_record_select( 'mmogame_aa_users_guid', 'guid=?', [$guid]);
         if ($rec === false) {
             if ($create == false) {
@@ -171,12 +171,12 @@ class mmogame {
             $userid = $rec->id;
         }
 
-        return self::get_auserid_from_db( $db, 'guid', $userid, $create);
+        return self::get_auserid_from_db($db, 'guid', $userid, $create);
     }
 
     public static function get_auserid_from_moodle( $db, $userid, $create) {
 
-        return self::get_auserid_from_db( $db, 'moodle', $userid, $create);
+        return self::get_auserid_from_db($db, 'moodle', $userid, $create);
     }
 
     public static function get_auserid_from_usercode( $db, $code, $instance) {
@@ -185,10 +185,10 @@ class mmogame {
             return false;
         }
 
-        return self::get_auserid_from_db( $db, 'usercode', $rec->id, true);
+        return self::get_auserid_from_db($db, 'usercode', $rec->id, true);
     }
 
-    public static function get_auserid_from_db( $db, $kind, $userid, $create) {
+    public static function get_auserid_from_db($db, $kind, $userid, $create) {
         $rec = $db->get_record_select( 'mmogame_aa_users', 'kind = ? AND instanceid=?', [$kind, $userid]);
 
         if ($rec != false) {
@@ -203,10 +203,10 @@ class mmogame {
             ['kind' => $kind, 'instanceid' => $userid, 'lastlogin' => time(), 'lastip' => self::get_ip()]);
     }
 
-    public static function get_asuerid_from_object( $db, $data, $instance) {
+    public static function get_asuerid_from_object($db, $data, $instance) {
         if (isset( $data->kinduser)) {
             if ($data->kinduser == 'usercode') {
-                return self::get_auserid_from_usercode( $db, $data->user, $instance);
+                return self::get_auserid_from_usercode($db, $data->user, $instance);
             } else if ($data->kinduser == 'guid') {
                 return self::get_auserid_from_guid( $db, $data->user, $instance);
             } else if ($data->kinduser == 'moodle') {
@@ -219,18 +219,18 @@ class mmogame {
         return false;
     }
 
-    public function login_user( $auserid) {
+    public function login_user($auserid) {
         $this->db->update_record( 'mmogame_aa_users',
             ['id' => $auserid, 'lastlogin' => time(), 'lastip' => self::get_ip()]);
 
         $this->auserid = $auserid;
     }
 
-    public static function get_instances( $db, $mmogameid, $auserid) {
+    public static function get_instances($db, $mmogameid, $auserid) {
         return $db->get_records_select('mmogame_aa_instances', 'mmogameid=? AND auserid=?', [$mmogameid, $auserid]);
     }
 
-    public static function getgame( $db, $id, $pin) {
+    public static function getgame($db, $id, $pin) {
         $rgame = $db->get_record_select('mmogame', "id=?", [$id]);
         if ($rgame === false) {
             return false;
@@ -247,7 +247,7 @@ class mmogame {
         return $class::get_new($db, $rgame, $rinstance);
     }
 
-    public static function getgame_first( $db, $id) {
+    public static function getgame_first($db, $id) {
         $rgame = $db->get_record_select('mmogame', "id=?", [$id]);
         if ($rgame === false) {
             return false;
@@ -265,7 +265,7 @@ class mmogame {
         return $class::get_new($db, $rgame, $rinstance);
     }
 
-    public function json_items_table( $table, $mainid, $data, &$ret) {
+    public function json_items_table($table, $mainid, $data, &$ret) {
         $recs = $this->db->get_records_select( $table, 'mainid=?', [$mainid]);
 
         $ret = [];
@@ -293,7 +293,7 @@ class mmogame {
         return $rec->maxnum + 1;
     }
 
-    protected function get_avatar_default( $auserid) {
+    protected function get_avatar_default($auserid) {
         // Compute default avatar.
         $db = $this->db;
         $instance = $this->rinstance;
@@ -338,7 +338,7 @@ class mmogame {
         return $avatarid;
     }
 
-    public function get_grade( $auserid) {
+    public function get_grade($auserid) {
 
         $instance = $this->get_rinstance();
         $db = $this->db;
@@ -429,7 +429,7 @@ class mmogame {
         return $db->get_record_select( 'mmogame_aa_grades', 'id=?', [$id]);
     }
 
-    public function get_avatar_info( $auserid) {
+    public function get_avatar_info($auserid) {
         $sql = "SELECT g.*, a.directory, a.filename, a.id as aid, c.color1, c.color2, c.color3, c.color4, c.color5".
             " FROM {$this->db->prefix}mmogame_aa_grades g LEFT JOIN {$this->db->prefix}mmogame_aa_avatars a ON g.avatarid=a.id".
             " LEFT JOIN {$this->db->prefix}mmogame_aa_colorpalettes c ON c.id=g.colorpaletteid ".
@@ -454,7 +454,7 @@ class mmogame {
         return $grade;
     }
 
-    public function get_rank_alone( $auserid, $field) {
+    public function get_rank_alone($auserid, $field) {
         $grade = $this->get_grade( $auserid);
 
         $value = $grade->$field;
@@ -470,7 +470,7 @@ class mmogame {
         return $_SERVER['REMOTE_ADDR'];
     }
 
-    public function get_avatars( $auserid) {
+    public function get_avatars($auserid) {
         $info = $this->get_avatar_info( $auserid);
 
         $where = 'ishidden = 0 AND '.
@@ -486,7 +486,7 @@ class mmogame {
         return $ret;
     }
 
-    public function set_avatar( $auserid, $nickname, $avatarid) {
+    public function set_avatar($auserid, $nickname, $avatarid) {
         $info = $this->get_avatar_info( $auserid);
         $instance = $this->get_rinstance();
 
@@ -516,7 +516,7 @@ class mmogame {
         }
     }
 
-    public function get_palettes( $auserid) {
+    public function get_palettes($auserid) {
         $info = $this->get_avatar_info( $auserid);
 
         $recs = $this->db->get_records_select( 'mmogame_aa_colorpalettes', '', null, 'hue');
@@ -528,12 +528,12 @@ class mmogame {
         return $ret;
     }
 
-    public function set_colorpalette( $auserid, $colorpaletteid) {
+    public function set_colorpalette($auserid, $colorpaletteid) {
         $info = $this->get_avatar_info( $auserid);
         $this->db->update_record( 'mmogame_aa_grades', ['id' => $info->id, 'colorpaletteid' => $colorpaletteid]);
     }
 
-    protected function get_fastjson_default( $id) {
+    protected function get_fastjson_default($id) {
         $s = dechex( mt_rand( 1, 15));
         for ($i = 1; $i <= MMOGAME_FASTJSON_LENGTH1; $i++) {
             $s .= dechex( mt_rand( 0, 15));
@@ -541,7 +541,7 @@ class mmogame {
         return $s.dechex( $id);
     }
 
-    public function save_state_file( $state, $filecontents) {
+    public function save_state_file($state, $filecontents) {
         global $CFG;
 
         // Creates a random upload directory in temp.
@@ -574,7 +574,7 @@ class mmogame {
         return $newdir;
     }
 
-    public function save_state( $state, $statecontents, $filecontents, $timefastjson) {
+    public function save_state($state, $statecontents, $filecontents, $timefastjson) {
 
         $newdir = $this->save_state_file( $state, $filecontents);
 
@@ -596,7 +596,7 @@ class mmogame {
         }
     }
 
-    public static function compute_hue( $color1, $color2, $color3, $color4, $color5, &$colorsort1, &$colorsort2,
+    public static function compute_hue($color1, $color2, $color3, $color4, $color5, &$colorsort1, &$colorsort2,
         &$colorsort3, &$colorsort4, &$colorsort5) {
 
         $colors = [$color1, $color2, $color3, $color4, $color5];
@@ -610,11 +610,11 @@ class mmogame {
         return self::calcualtehue( $colorsort1);
     }
 
-    public static function usort_mmogame_palettes_contrast( $a, $b) {
+    public static function usort_mmogame_palettes_contrast($a, $b) {
         return self::get_contrast( $a) <=> self::get_contrast( $b);
     }
 
-    public static function get_contrast( $color) {
+    public static function get_contrast($color) {
         $red    = ( $color >> 16 ) & 0xFF;    // Red is the Left Most Byte.
         $green  = ( $color >> 8 ) & 0xFF;     // Green is the Middle Byte.
         $blue   = $color & 0xFF;
@@ -656,12 +656,12 @@ class mmogame {
         return $hue;
     }
 
-    public function update_state( $state) {
+    public function update_state($state) {
         $this->rstate->state = $state;
         $this->db->update_record( 'mmogame_aa_states', ['id' => $this->rstate->id, 'state' => $state]);
     }
 
-    public static function repair_nickname( $nickname, $filename) {
+    public static function repair_nickname($nickname, $filename) {
         if ($nickname != '' && $nickname != null) {
             return $nickname;
         }
@@ -671,7 +671,7 @@ class mmogame {
         return $pos != false ? substr( $filename, 0, $pos) : $filename;
     }
 
-    public static function get_newpin( $mmogameid, $db, $digits) {
+    public static function get_newpin($mmogameid, $db, $digits) {
         $min = pow( 10, $digits - 1) + 1;
         $max = pow( 10, $digits) - 1;
         for (;;) {

@@ -17,13 +17,13 @@
 /**
  * This file contains the version information for the file submission plugin
  *
- * @package    mmogame_quiz
+ * @package    mmogametype_quiz
  * @copyright  2024 Vasilis Daloukas
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2022092600;
+$plugin->version   = 2024102200;
 $plugin->requires  = 2010112400;
 $plugin->component = 'mmogametype_quiz';

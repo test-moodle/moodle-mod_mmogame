@@ -19,7 +19,7 @@
 /**
  * mmogame_quiz_alone class
  *
- * @package    mmogame_quiz
+ * @package    mmogametype_quiz
  * @copyright  2024 Vasilis Daloukas
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -31,7 +31,7 @@ require_once(dirname(__FILE__) . '/quiz.php');
 class mmogame_quiz_alone extends mmogame_quiz {
     protected $callupdategrades;
 
-    public function __construct( $db, $rgame, $rinstance) {
+    public function __construct($db, $rgame, $rinstance) {
         $this->callupdategrades = true;
 
         if (isset( $rinstance->typeparams)) {
@@ -45,7 +45,7 @@ class mmogame_quiz_alone extends mmogame_quiz {
             }
         }
 
-        parent::__construct( $db, $rgame, $rinstance, null);
+        parent::__construct($db, $rgame, $rinstance, null);
     }
 
     public function get_attempt() {
@@ -65,16 +65,16 @@ class mmogame_quiz_alone extends mmogame_quiz {
         return $this->get_attempt_new_internal(null, 0, 0, 0);
     }
 
-    public function set_state_json( $state, &$ret) {
+    public function set_state_json($state, &$ret) {
         $timefastjson = round( microtime( true), 6);
 
         $statecontents = $state . "-" . $timefastjson;
         $filecontents = '';
 
-        $this->save_state( $state, $statecontents, $filecontents, $timefastjson);
+        $this->save_state($state, $statecontents, $filecontents, $timefastjson);
     }
 
-    public function set_answer( $attempt, $query, $useranswer, $autograde, $submit, &$ret) {
+    public function set_answer($attempt, $query, $useranswer, $autograde, $submit, &$ret) {
         if ($autograde) {
             $attempt->iscorrect = $this->qbank->is_correct( $query, $useranswer, $this, $a['fraction']);
         }
@@ -138,11 +138,11 @@ class mmogame_quiz_alone extends mmogame_quiz {
         return $attempt->iscorrect;
     }
 
-    protected function get_score_query( $iscorrect, $query) {
+    protected function get_score_query($iscorrect, $query) {
         return $this->get_score_query_negative( $iscorrect, $query);
     }
 
-    public function set_timeout( $attemptid) {
+    public function set_timeout($attemptid) {
         $attempt = $this->db->get_record_select( 'mmogame_quiz_attempts', 'id=?', [$attemptid]);
 
         $this->db->update_record( 'mmogame_quiz_attempts', ['id' => $attemptid, 'timeanswer' => time()]);
@@ -150,7 +150,7 @@ class mmogame_quiz_alone extends mmogame_quiz {
         return true;
     }
 
-    public function get_highscore( $input, &$ret) {
+    public function get_highscore($input, &$ret) {
         $recs = $this->db->get_records_select( 'mmogame_aa_grades', 'ginstanceid=? AND numgame=? AND sumscore > 0',
             [$this->rinstance->id, $this->rinstance->numgame], 'sumscore DESC', '*', 0, $input->count);
         $map = [];

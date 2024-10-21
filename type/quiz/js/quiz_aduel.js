@@ -137,6 +137,7 @@ class mmogame_quiz_aduel extends mmogame_quiz {
         if( json.state == 0) {
             json.qtype = ''
             super.onServerGetAttempt( json, param)
+            this.show_score( json)
             this.button5050.style.visibility = 'hidden'
             this.buttonSkip.style.visibility = 'hidden'            
             if( this.btnSubmit != undefined) {

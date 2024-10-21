@@ -765,6 +765,7 @@ class mmogame_quiz_alone extends mmogame_quiz {
         if( json.state == 0 && param == undefined) {
             json.qtype = ''
             super.onServerGetAttempt( json, param)
+            this.show_score( json)
 
             return this.createDivMessageStart( '[LANGM_WAIT_TO_START]')
         }

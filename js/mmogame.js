@@ -34,7 +34,7 @@ class mmogame {
     }
     
     hasHelp() {
-        return this.kinduser == 'usercode' && this.helpUrl != undefined && this.helpUrl != ""
+        return false
     }
 
     createTextButton( parent, left, top, width, height, classname) {
@@ -974,7 +974,7 @@ class mmogame {
         var instance = this
         this.buttonSound.addEventListener("click", function(){ instance.onClickSound( this); })
 
-        this.buttonSound.title = 'Ήχος'
+        this.buttonSound.title = '[LANGM_SOUND]'
     }
 
     onClickSound( btn) {

@@ -27,9 +27,9 @@ require_once(dirname(__FILE__) . '/../../model/aduel.php');
 function mmogame_json_quiz_getattempt($data, $game, &$ret) {
     global $CFG;
 
-    $instance = $game->get_rinstance();
+    $rinstance = $game->get_rinstance();
 
-    $auserid = mmogame::get_asuerid_from_object( $game->get_db(), $data, $instance);
+    $auserid = mmogame::get_asuerid_from_object( $game->get_db(), $data, $rinstance);
     if ($auserid === false) {
         $ret['errorcode'] = 'invalidauser';
         return;
@@ -37,6 +37,8 @@ function mmogame_json_quiz_getattempt($data, $game, &$ret) {
     $game->login_user( $auserid);
 
     $ret['dataroot'] = $CFG->dataroot;
+    $ret['type'] = $rinstance->type;
+    $ret['model'] = $rinstance->model;
 
     if (isset( $data->nickname) && isset( $data->avatarid) && isset( $data->paletteid)) {
         $info = $game->get_avatar_info( $auserid);

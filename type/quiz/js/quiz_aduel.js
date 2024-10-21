@@ -17,10 +17,6 @@ class mmogame_quiz_aduel extends mmogame_quiz {
         this.autosubmit = true
         this.type = 'aduel'
     }
-    
-    hasHelp() {
-        return true
-    }
 
     createIconBar() {
         let i = 0;
@@ -401,63 +397,7 @@ class mmogame_quiz_aduel extends mmogame_quiz {
 		this.playAudio( found_correct ? this.audioYes : this.audioNo)
     }
 
-    OnServerAnswer_shortanswer(json) {
-        let height = this.fontSize
-        let aCorrect = json.correct.split(",")
-        for( let i = 0; i < this.answersID.length; i++) {
-            let label = this.aItemLabel[ i]
-            if( aCorrect.includes( this.answersID[ i])) {
-                label.innerHTML = this.getSVGcorrect( width, true) + label.innerHTML
-            } else if( json.correct != undefined && this.aItemAnswer[ i].checked) {
-                label.innerHTML = this.getSVGcorrect( width, false) + label.innerHTML
-            }
-        }
-    }
-
-    createAnswer_shortanswer( left, top, width, onlyMetrics, fontSize) {
-
-        var div = document.createElement("input")
-        div.style.position = "absolute"
-        div.style.width = width + "px"
-        div.style.type = "text"
-        div.style.fontSize = fontSize + "px"
-        div.value = this.answer
-
-        if( onlyMetrics) {
-            this.body.appendChild( div)
-            let ret = [div.scrollWidth - 1, Math.max( div.scrollHeight, fontSize)]
-            this.body.removeChild( div)
-            return ret
-        }
-
-        this.explainLeft = left
-        div.style.left = left + "px"
-        div.style.top = top + "px"
-        div.autofocus = true
-        div.style.background = this.getColorHex( this.colorBackground) //"#234025"
-        div.style.color = this.getColorContrast( this.colorBackground) //"#DCBFDA"
-
-        this.area.appendChild( div)
-        let instance = this
-        div.addEventListener("keyup", function(){
-            if( instance.autosave) {
-                instance.answer = div.value
-                instance.sendAnswer( false)
-            }
-        })
-        div.addEventListener("keydown", function() { 
-            if (event.key === "Enter") {
-                instance.answer = div.value
-                instance.sendAnswer( true)
-            }
-        })
-        div.focus()
-
-        return div.scrollHeight + this.padding
-    }
-
     showCorrectAnswer( json) {
-
         this.timeclose = 0
         this.updateLabelTimer();
 
@@ -495,9 +435,6 @@ class mmogame_quiz_aduel extends mmogame_quiz {
     }
 
     show_score( json) {
-        json.percentcompleted = 0.27
-        json.sumscore = 14
-        
         let rank = json.rank
         let rankc = json.completedrank
         if( rank != undefined && rankc != undefined) {
@@ -605,9 +542,9 @@ class mmogame_quiz_aduel extends mmogame_quiz {
         var data = JSON.stringify({ "command": "gethighscore", "mmogameid": this.mmogameid, "pin" : this.pin,
 			'kinduser': this.kinduser, "user": this.auserid, "count" : 10})
         xmlhttp.send( data)
-    }    
+    }
+
     createScreenHighScore( json) {
-        
         if( this.highScore != undefined) {
             this.body.removeChild( this.highScore)
             this.highScore = undefined
@@ -644,8 +581,6 @@ class mmogame_quiz_aduel extends mmogame_quiz {
 
         let top = 2 * this.iconSize
         let height = this.areaHeight - this.areaTop - this.padding;
-
-        //this.areaTop = this.iconSize + this.padding
 
         let canvas = document.createElement('canvas');
         canvas.style.left = '0px'

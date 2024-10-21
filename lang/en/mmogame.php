@@ -85,7 +85,8 @@ $string['reset_mmogame_deleted_course'] = 'Delete tries from deleted courses';
 $string['crontask'] = 'Crontask mmogame';
 
 // Gate.
-$string['invalid_game_pin'] = 'Δεν υπάρχει ο κωδικός παιχνιδιού {$a} ή ο κωδικός διαχείρισης που δώσατε';
+$string['ivalid_mmogame_or_pin'] = 'Invalid id {$a->id} or pin {$a->pin}';
+$string['url_for_playing'] = 'Url for playing {$a}';
 
 // Import_ods.
 $string['import_completed'] = 'Έγινε εισαγωγή {$a} ερωτήσεων';
@@ -107,7 +108,7 @@ $string['js_ranking_percent'] = 'Ranking order based on the percentage of correc
 $string['js_grade_last_question'] = 'Last question marks';
 $string['js_percent'] = 'Percentage of correct answers';
 $string['js_question_time'] = 'Question time';
-
+$string['js_sound'] = 'Sound';
 
 // Admin.
 $string['numgame'] = 'Number of game';

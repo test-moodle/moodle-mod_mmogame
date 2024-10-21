@@ -37,12 +37,13 @@ $PAGE->set_url('/mod/mmogame/view.php', ['id' => $cm->id]);
 require_once($CFG->dirroot."/mod/mmogame/model/{$model}.php");
 
 if (has_capability('mod/mmogame:manage', $context)) {
-    mmogame_quiz_manage( $id, $mmogame);
+    $url = $CFG->wwwroot.'/mod/mmogame/gate.php?id='.$mmogame->get_id().'&pin='.$mmogame->get_rinstance()->pin;
+    mmogame_quiz_manage( $id, $mmogame, $url);
 } else {
-    redirect( $CFG->wwwroot.'/mod/mmogame/gate.php?pin='.$mmogame->get_rinstance()->pin);
+    redirect( $url);
 }
 
-function mmogame_quiz_manage( $id, $mmogame) {
+function mmogame_quiz_manage( $id, $mmogame, $url) {
     global $OUTPUT;
 
     if (count( $_POST) > 0) {
@@ -56,6 +57,8 @@ function mmogame_quiz_manage( $id, $mmogame) {
     echo $OUTPUT->header();
 
     $mform->display();
+    
+    echo '<br>'.get_string( 'url_for_playing', 'mmogame', ": <a href=\"$url\" target=\"_blank\">$url</a>");
     echo $OUTPUT->footer();
 }
 

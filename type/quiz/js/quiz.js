@@ -259,11 +259,7 @@ class mmogame_quiz extends mmogame {
     }
 
     createAnswer( left, top, width, onlyMetrics, fontSize, disabled) {
-        if( this.qtype == 'multichoice') {
-            return this.createAnswer_multichoice( left, top, width, onlyMetrics, fontSize, disabled)
-        } else {
-            return this.createAnswer_shortanswer( left, top, width, onlyMetrics, fontSize, disabled)
-        }
+        return this.createAnswer_multichoice( left, top, width, onlyMetrics, fontSize, disabled)
     }
 
     createAnswer_multichoice( left, top, width, onlyMetrics, fontSize, disabled) {
@@ -531,16 +527,12 @@ class mmogame_quiz extends mmogame {
             this.btnSubmit = undefined
         }
 
-        let btn = super.createImageButton( this.body, this.nextLeft, this.nextTop, 0, this.iconSize, "", 'assets/next.svg', false, 'alt')
+        let btn = super.createImageButton( this.area, this.nextLeft, this.nextTop, 0, this.iconSize, "", 'assets/next.svg', false, 'alt')
         let instance = this
-        btn.addEventListener("click", function(){ instance.sendGetAttempt(); instance.area.removeChild( btn);})
-
-        if( this.qtype != "multichoice") {
-            let ans = this.createDiv( this.body, this.explainLeft, this.nextTop, this.iconSize, this.iconSize)
-            ans.style.lineHeight= "1em"
-            ans.style.color = this.getColorContrast( this.colorBackground)
-            ans.innerHTML = this.getSVGcorrect( this.iconSize, json.iscorrect)
-        }
+        btn.addEventListener("click", function(){
+            instance.sendGetAttempt(); 
+            instance.area.removeChild( btn);            
+        }) 
 
         if( !json.iscorrect && this.qtype != "multichoice") {
             let w = this.nextLeft - this.explainLeft - 2 * this.padding - this.iconSize
@@ -589,7 +581,7 @@ class mmogame_quiz extends mmogame {
 			this.autoResizeText( label, width, height, true, this.minFontSize, this.maxFontSize, 0.9)
 
             let t = parseInt( this.aItemAnswer[ i].style.top)
-            let div = this.createDiv( this.body, this.aItemCorrectX[ i], t, this.radioSize, this.radioSize)
+            let div = this.createDiv( this.area, this.aItemCorrectX[ i], t, this.radioSize, this.radioSize)
             div.innerHTML = this.getSVGcorrect( this.radioSize, iscorrect, this.colorScore, this.colorScore)
         }
     }
@@ -655,17 +647,20 @@ class mmogame_quiz_alone extends mmogame_quiz {
     createIconBar() {
         let i = 0
 
+        this.nickNameHeight = Math.round( this.iconSize /  3)
+
         this.buttonAvatarLeft = this.padding + i * (this.iconSize + this.padding)
         this.buttonAvatarHeight = Math.round( this.iconSize - this.iconSize / 3)
         this.buttonAvatarTop = this.iconSize - this.buttonAvatarHeight + this.padding
         this.createButtonsAvatar( 1, Math.round( this.padding + (i++) * (this.iconSize + this.padding)))
+        this.buttonsAvatar[ 1].style.top = (this.padding + this.nickNameHeight) + "px"
+
         let h = this.iconSize - this.buttonAvatarHeight
         this.divNickname = this.createDiv( this.body, this.buttonAvatarLeft, this.padding, this.iconSize, this.buttonAvatarTop)
 
-        this.createDivScore( this.padding + (i++) * (this.iconSize + this.padding), this.padding, 1, true)
-        this.createDivPercent( this.padding + (i++) * (this.iconSize + this.padding), this.padding)
+        this.createDivScorePercent( this.padding + (i++) * (this.iconSize + this.padding), this.padding + this.nickNameHeight, 1, true)
 
-        this.createButtonSound( this.padding + (i++) * (this.iconSize + this.padding), this.padding)
+        this.createButtonSound( this.padding + (i++) * (this.iconSize + this.padding), this.padding + this.nickNameHeight)
         let instance = this
         if( this.hasHelp()) {
             this.createButtonHelp( this.padding +  (i++) * (this.iconSize + this.padding), this.padding)
@@ -774,4 +769,31 @@ class mmogame_quiz_alone extends mmogame_quiz {
             this.btnSubmit.style.visibility = "hidden"
         }
     }
+    
+    show_score( json) {
+        let rank = json.rank
+        let rankc = json.completedrank
+        if( rank != undefined && rankc != undefined) {
+            if( parseInt( rank) < parseInt( rankc)) {
+                json.completedrank = ''
+                json.rank = '# ' + rank
+            } else {
+                json.rank = ''
+                json.completedrank = '# ' + rankc
+            }
+        }
+
+        let s = json.sumscore
+        json.sumscore = this.labelScore.innerHTML
+        super.show_score( json)
+        json.sumscore = s
+        s = json.sumscore == undefined ? '' : '<b>' + json.sumscore + '</b>'
+        if( this.labelScore.innerHTML != s) {
+            this.labelScore.innerHTML = s
+            this.autoResizeText( this.labelScore, 0.8 * this.iconSize / 2, this.iconSize / 2, false, 0, 0, 1)
+        }
+
+        json.rank = rank
+        json.completedrank = rankc
+    }    
 }

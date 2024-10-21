@@ -596,7 +596,6 @@ class mmogame_gate extends mmogame {
         let d = { "command": "getattempt", "mmogameid": this.mmogameid, "pin" : this.pin, "kinduser" : this.kinduser,
             "user": auserid, "nickname" : nickname, "paletteid" : paletteid, "avatarid" : avatarid,
             "maxwidth" : this.maxImageWidth, "maxheight": this.maxImageHeight}
-            console.log(d)
         if( this.helpurl == undefined) {
             d[ 'helpurl'] = 1
         }
@@ -610,12 +609,12 @@ class mmogame_gate extends mmogame {
                 console.log( json.errorcode  + " " + auserid)
                 alert( json.errorcode  + " " + auserid)
                 return
-            } else if( json.errorcode != 'aduel_no_rivals') {
+            } else {
                 alert( "Problem " + json.errorcode + "#")
             }
         }
-        
-        let game = new mmogame_quiz_aduel()
+        console.log( json)
+        let game = new [CLASS]()
         game.openGame(this.url, this.mmogameid, this.pin, auserid, this.kinduser, false)
         game.onServerGetAttempt( json)
     }

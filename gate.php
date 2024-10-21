@@ -35,7 +35,7 @@ $mmogameid = required_param('id', PARAM_INT);
 $pin = required_param('pin', PARAM_INT);
 
 $rinstance = $DB->get_record_select( 'mmogame_aa_instances', 'mmogameid=? AND pin=?', [$mmogameid, $pin]);
-if( $rinstance === false) {
+if ($rinstance === false) {
     $data = new stdClass();
     $data->mmogameid = $mmogameid;
     $data->pin = $pin;
@@ -90,11 +90,11 @@ function mmogame_change_javascript( $type, $file, $search = '', $replace = '') {
     if (!file_exists( dirname(__FILE__).'/'.$file)) {
         return;
     }
-    
+
     $s = file_get_contents( dirname(__FILE__).'/'.$file);
 
     $source = $dest = [];
-    if( $search != '') {
+    if ($search != '') {
         $source[] = $search;
         $dest[] = $replace;
     }

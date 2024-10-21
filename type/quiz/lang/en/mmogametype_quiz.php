@@ -54,6 +54,7 @@ $string['aduel_state1'] = 'Playing the game';
 $string['js_aduel_help'] = 'Each player initially answers 4 questions of increasing difficulty and earns 3 points if his answer is correct and loses 1 point for each wrong answer.<br>
 Another player then answers the same questions.<br>
 If only one of the two answered a question correctly, he gets an extra 3 points.';
+$string['js_alone_help'] = 'Each player earns 3 points if his answer is correct and loses 1 point for each wrong answer.';
 $string['js_help_5050'] = 'Shows only 2 possible answers';
 $string['js_help_skip'] = 'Skip the question';
 $string['js_wizard'] = 'Revealing the correct answer will cost you 1 mark';

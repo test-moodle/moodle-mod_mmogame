@@ -80,8 +80,6 @@ class mmogame_gate extends mmogame {
             let heightAvatars = (maxHeight - 4 * fontSize + heightColors) * 3 / 5
             let computedHeight = heightCode + 3 * size[ 1] + 8 * instance.padding + heightColors + heightAvatars
 
-            console.log( "fontSize=" + fontSize + " size=" + size[ 0] + " , " + size[ 1] + " computedHeight=" + computedHeight + " maxHeight=" + maxHeight)
-            
             return computedHeight < maxHeight ? -1 : 1
         })
 
@@ -496,7 +494,6 @@ class mmogame_gate extends mmogame {
     }
   
     showColorPalettes( json, left, top, width, height, countX, countY) {
-        console.log( json)
         var t0 = performance.now()
 
         let instance = this
@@ -606,14 +603,12 @@ class mmogame_gate extends mmogame {
     onServerGetAttempt( json, auserid) {
         if( json.errorcode != undefined ) {
             if( json.errorcode == 'invalidauser') {
-                console.log( json.errorcode  + " " + auserid)
                 alert( json.errorcode  + " " + auserid)
                 return
             } else {
                 alert( "Problem " + json.errorcode + "#")
             }
         }
-        console.log( json)
         let game = new [CLASS]()
         game.openGame(this.url, this.mmogameid, this.pin, auserid, this.kinduser, false)
         game.onServerGetAttempt( json)

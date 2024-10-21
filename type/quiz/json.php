@@ -47,7 +47,11 @@ function mmogame_json_quiz_getattempt($data, $game, &$ret) {
             'colorpaletteid' => $data->paletteid, ]);
     }
 
-    $attempt = $game->get_attempt();
+    if( $game->get_state() != 0) {
+        $attempt = $game->get_attempt();
+    } else {
+        $attempt = false;
+    }
 
     $game->append_json( $ret, $attempt, $data);
 }

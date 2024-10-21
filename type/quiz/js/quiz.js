@@ -89,7 +89,9 @@ class mmogame_quiz extends mmogame {
         this.errorcode = json.errorcode
 
         this.readJsonFiles( json)
-        this.createScreen( json, false)
+        if( json.state != 0) {
+            this.createScreen( json, false)
+        }
 
         this.updateLabelTimer()
 
@@ -671,7 +673,7 @@ class mmogame_quiz_alone extends mmogame_quiz {
 
         let copyrightHeight = this.getCopyrightHeight()
 
-        this.areaTop = 2 * this.padding + this.iconSize
+        this.areaTop = 2 * this.padding + this.iconSize + this.nickNameHeight        
         this.areaWidth = Math.round( window.innerWidth - 2 * this.padding)
 
         this.areaHeight = Math.round( window.innerHeight - this.areaTop - copyrightHeight)
@@ -756,11 +758,15 @@ class mmogame_quiz_alone extends mmogame_quiz {
     }
 
     onServerGetAttempt( json, param) {
+        if( json.dataroot != undefined) {
+            this.dataroot = json.dataroot
+        }
+        
         if( json.state == 0 && param == undefined) {
             json.qtype = ''
             super.onServerGetAttempt( json, param)
 
-            return this.createDivMessageStart( 'LANGM_WAIT_TO_START')
+            return this.createDivMessageStart( '[LANGM_WAIT_TO_START]')
         }
 
         super.onServerGetAttempt( json, param)
@@ -795,5 +801,18 @@ class mmogame_quiz_alone extends mmogame_quiz {
 
         json.rank = rank
         json.completedrank = rankc
+    }
+    
+    showHelpScreen( div, width, height) {
+        div.innerHTML = `<br>
+<div>[LANG_ALONE_HELP]</div><br>
+
+<table border=1>
+    <tr>
+        <td><img height="90" src="type/quiz/assets/aduel/example2.png" alt="" /></td>
+        <td>[LANG_ADUEL_EXAMPLE2]</td>
+    </tr>
+</table>
+        `;
     }    
 }

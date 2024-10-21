@@ -27,11 +27,9 @@ $type = $_POST['type'];
 
 $ret = '';
 $filemain = $_POST['dataroot']. '/temp/mmogame/states/'.substr( $fastjson, -2) ."/{$fastjson}";
-
 if (!file_exists( $filemain.'.txt')) {
     return;
 }
 
 $ret = file_get_contents( $filemain.'.txt');
-
 die( $ret);

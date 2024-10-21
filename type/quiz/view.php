@@ -57,7 +57,7 @@ function mmogame_quiz_manage( $id, $mmogame, $url) {
     echo $OUTPUT->header();
 
     $mform->display();
-    
+
     echo '<br>'.get_string( 'url_for_playing', 'mmogame', ": <a href=\"$url\" target=\"_blank\">$url</a>");
     echo $OUTPUT->footer();
 }

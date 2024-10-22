@@ -42,7 +42,7 @@ class mmogameqbank_moodlequestion extends mmogameqbank {
         }
     }
 
-    public function load( $id, $loadextra = true, $fields = '', $debugfraction = false) {
+    public function load( $id, $loadextra = true, $fields = '') {
         $params = $this->mmogame->get_params();
         $needname = $params != false && $params->debugname;
         if ($fields == '') {
@@ -77,10 +77,10 @@ class mmogameqbank_moodlequestion extends mmogameqbank {
             return $ret;
         }
 
-        return $this->load2( $ret, $debugfraction);
+        return $this->load2( $ret);
     }
 
-    protected function load2( &$query, $debugfraction) {
+    protected function load2( &$query) {
         $recs = $this->mmogame->get_db()->get_records_select( 'question_answers', 'question=?',
             [$query->questionid], 'fraction DESC', 'id,answer,fraction');
         unset( $query->correctid);
@@ -94,9 +94,6 @@ class mmogameqbank_moodlequestion extends mmogameqbank {
 
             if ($query->qtype == 'shortanswer') {
                 $query->concept = $rec->answer;
-                if ($debugfraction) {
-                    $query->definition .= "help (fraction=$rec->fraction answer=$rec->answer)";
-                }
                 break;
             }
             if (!isset( $query->answers)) {
@@ -107,16 +104,7 @@ class mmogameqbank_moodlequestion extends mmogameqbank {
             }
             $info = new stdClass();
             $info->id = $rec->id;
-            $info->answer = $rec->answer;
-            if ($debugfraction) {
-                if (mb_substr( $info->answer, -4) == '<br>') {
-                    $info->answer = mb_substr( $info->answer, 0, mb_strlen( $info->answer) - 4);
-                }
-                if (mb_substr( $info->answer, -4) == '</p>') {
-                    $info->answer = mb_substr( $info->answer, 0, mb_strlen( $info->answer) - 4);
-                }
-                $info->answer .= ' fraction='.$rec->fraction;
-            }
+            $info->answer = $rec->answer;            
             $info->fraction = $rec->fraction;
             if ($first) {
                 $first = false;
@@ -139,7 +127,7 @@ class mmogameqbank_moodlequestion extends mmogameqbank {
         $db = $game->get_db();
         $files = $filewidth = $fileheight = [];
 
-        $rec = $this->load( $id, true, '', $game->get_debugfraction());
+        $rec = $this->load( $id, true);
         $contextid = 0;
 
         $filekeys = $targetwidth = $targetheight = [];

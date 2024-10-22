@@ -19,7 +19,9 @@
  *
  * This class provides all the functionality for the new mmogame module.
  *
- * @package   mod_mmogame
+ * @package    mod_mmogame
+ * @copyright  2024 Vasilis Daloukas
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 define( 'MMOGAME_QBANK_MOODLEQUESTION', 'moodlequestion');
@@ -31,10 +33,16 @@ define( 'MMOGAME_DATABASE_MOODLE', 'moodle');
 
 define( 'MMOGAME_USER_MOODLE', 'moodle');
 
+/**
+ * Returns a unique guid string version 4.
+ *
+ * @param boolean $trim
+ * @return string (the guid)
+ */
 function guidv4($trim = true) {
     // Windows.
     if (function_exists('com_create_guid') === true) {
-        if ($trim === true) {
+        if ($trim) {
             return trim(com_create_guid(), '{}');
         } else {
             return com_create_guid();

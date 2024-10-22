@@ -38,19 +38,40 @@ define( 'MMOGAME_ADUEL_STATE_LAST', 1);
 
 define( 'MMOGAME_ERRORCODE_NOQUERIES', 'noqueries');
 
+/**
+ * The class mmogame is the base class for all games
+ *
+ * @package    mod_mmogame
+ * @copyright  2024 Vasilis Daloukas
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class mmogame {
+    /** @var db: database to be used. */
     protected $db;
+    /** @var rgame: the record of table mmogame. */
     protected $rgame;
+    /** @var rinstance: the record of table mmogame_aa_instances. */
     protected $rinstance;
-    protected $iteacher;
+    /** @var auserid: the user (table mmogame_aa_users). */
     protected $auserid = 0;
+    /** @var qbank: question bank to be used. */
     protected $qbank = false;
+    /** @var error: saves the error code. */
     protected $error = '';
+    /** @var timelimit: maximum time in seconds for answer. */
     protected $timelimit = 0;
-    protected $debugfraction = false;
+    /** @var rstate: the record of table mmogame_aa_states. */
     protected $rstate;
+    /** @var params: parameters. */
     protected $params;
 
+    /**
+     * Constructor.
+     *
+     * @param object $db (the database)
+     * @param object $rgame (a record from table mmogame)
+     * @param object $rinstance (a record from table mmogame_aa_instances)
+     */
     public function __construct($db, $rgame, $rinstance) {
         $this->db = $db;
         $this->rgame = $rgame;
@@ -88,78 +109,132 @@ class mmogame {
         $this->params = $this->rinstance->typeparams != '' ? json_decode( $this->rinstance->typeparams) : false;
     }
 
+    /**
+     * Return the params variable.
+     */
     public function get_params() {
         return $this->params;
     }
 
-    public function set_debugfraction($set) {
-        $this->debugfraction = $set;
-    }
-
-    public function get_debugfraction() {
-        return $this->debugfraction;
-    }
-
+    /**
+     * Sets the variable code.
+     @param string code
+     */
     public function set_errorcode($code) {
         $this->error = $code;
     }
 
-    public function set_attempt($attempt) {
-
-    }
-
+    /**
+     * Returns the variable error.
+     */
     public function get_errorcode() {
         return $this->error;
     }
 
+    /**
+     * Returns the variable timelimit.
+     */
     public function get_timelimit() {
         return $this->timelimit;
     }
 
+    /**
+     * Return the variable db.
+     */
     public function get_db() {
         return $this->db;
     }
 
+    /**
+     * Return the variable rgame.
+     */
     public function get_rgame() {
         return $this->rgame;
     }
 
+    /**
+     * Return the variable rinstance.
+     */
     public function get_rinstance() {
         return $this->rinstance;
     }
 
+    /**
+     * Return the variable rstate.
+     */
     public function get_rstate() {
         return $this->rstate;
     }
 
+    /**
+     * Return the variable rgame->id.
+     */
     public function get_id() {
         return $this->rgame->id;
     }
 
+    /**
+     * Return the variable rinstance->model.
+     */
     public function get_model() {
         return $this->rinstance->model;
     }
 
+    /**
+     * Return the variable rinstance->numgame.
+     */
     public function get_numgame() {
         return $this->rinstance->numgame;
     }
 
+    /**
+     * Return the variable rstate->state.
+     */
     public function get_state() {
         return $this->rstate->state;
     }
 
+    /**
+     * Return the variable rinstance->type.
+     */
     public function get_type() {
         return $this->rinstance->type;
     }
 
+    /**
+     * Return the variable qbank.
+     */
     public function get_qbank() {
         return $this->qbank;
     }
 
+    /**
+     * Return the variable auserid.
+     */
     public function get_auserid() {
         return $this->auserid;
     }
 
+    /**
+     * Return the variable rinstance->id.
+     */
+    public function get_ginstanceid() {
+        return $this->rinstance->id;
+    }
+
+    /**
+     * Return the coresponding record of variable auserid.
+     */
+    public function get_ruser() {
+        return $this->db->get_record_select( 'mmogame_aa_users', 'id=?', [$this->auserid]);
+    }
+
+    /**
+     * Return coresponding auserid from guid (login without password).
+     * @param object $db
+     * @param string $guid
+     * @param boolean $create
+     */
     public static function get_auserid_from_guid($db, $guid, $create) {
         $rec = $db->get_record_select( 'mmogame_aa_users_guid', 'guid=?', [$guid]);
         if ($rec === false) {
@@ -174,12 +249,23 @@ class mmogame {
         return self::get_auserid_from_db($db, 'guid', $userid, $create);
     }
 
-    public static function get_auserid_from_moodle( $db, $userid, $create) {
+    /**
+     * Return coresponding auserid from a Moodle user.
+     * @param object $db
+     * @param int $userid
+     * @param boolean $create
+     */
+    public static function get_auserid_from_moodle($db, $userid, $create) {
 
         return self::get_auserid_from_db($db, 'moodle', $userid, $create);
     }
 
-    public static function get_auserid_from_usercode( $db, $code, $instance) {
+    /**
+     * Return coresponding auserid from a users in the table mmogame_aa_users_code.
+     * @param object $db
+     * @param string $code
+     */
+    public static function get_auserid_from_usercode($db, $code) {
         $rec = $db->get_record_select( 'mmogame_aa_users_code', 'code=?', [$code]);
         if ($rec === false) {
             return false;
@@ -188,6 +274,13 @@ class mmogame {
         return self::get_auserid_from_db($db, 'usercode', $rec->id, true);
     }
 
+    /**
+     * Return coresponding auserid from a user.
+     * @param object $db
+     * @param string kind (the kind of user e.g. Moodle, GUID)
+     * @param string userid
+     * @param boolean $create
+     */
     public static function get_auserid_from_db($db, $kind, $userid, $create) {
         $rec = $db->get_record_select( 'mmogame_aa_users', 'kind = ? AND instanceid=?', [$kind, $userid]);
 
@@ -203,12 +296,18 @@ class mmogame {
             ['kind' => $kind, 'instanceid' => $userid, 'lastlogin' => time(), 'lastip' => self::get_ip()]);
     }
 
-    public static function get_asuerid_from_object($db, $data, $instance) {
+    /**
+     * Return coresponding auserid from a user (details are in object variable $data).
+     * @param object $db
+     * @param object data
+     * @return int
+     */
+    public static function get_asuerid_from_object($db, $data) {
         if (isset( $data->kinduser)) {
             if ($data->kinduser == 'usercode') {
-                return self::get_auserid_from_usercode($db, $data->user, $instance);
+                return self::get_auserid_from_usercode($db, $data->user);
             } else if ($data->kinduser == 'guid') {
-                return self::get_auserid_from_guid( $db, $data->user, $instance);
+                return self::get_auserid_from_guid( $db, $data->user);
             } else if ($data->kinduser == 'moodle') {
                 return self::get_auserid_from_db( $db, 'moodle', $data->user, true);
             }
@@ -219,6 +318,10 @@ class mmogame {
         return false;
     }
 
+    /**
+     * Marks user as loged in.
+     * @param int auserid
+     */
     public function login_user($auserid) {
         $this->db->update_record( 'mmogame_aa_users',
             ['id' => $auserid, 'lastlogin' => time(), 'lastip' => self::get_ip()]);
@@ -226,10 +329,14 @@ class mmogame {
         $this->auserid = $auserid;
     }
 
-    public static function get_instances($db, $mmogameid, $auserid) {
-        return $db->get_records_select('mmogame_aa_instances', 'mmogameid=? AND auserid=?', [$mmogameid, $auserid]);
-    }
-
+    /**
+     * Returns a game object
+     *
+     * @param object $db
+     * @param int id
+     * @param int pin
+     * @return object
+     */
     public static function getgame($db, $id, $pin) {
         $rgame = $db->get_record_select('mmogame', "id=?", [$id]);
         if ($rgame === false) {
@@ -247,17 +354,24 @@ class mmogame {
         return $class::get_new($db, $rgame, $rinstance);
     }
 
+    /**
+     * Returns a game object
+     *
+     * @param object $db
+     * @param int id
+     * @param int pin
+     * @return object
+     */
     public static function getgame_first($db, $id) {
         $rgame = $db->get_record_select('mmogame', "id=?", [$id]);
         if ($rgame === false) {
             return false;
         }
 
-        $recs = $db->get_records_select( 'mmogame_aa_instances', 'mmogameid=?', [$id], 'id', '*', 0, 1);
-        if (count( $recs) == 0) {
+        $rinstance = $db->get_record_select_first( 'mmogame_aa_instances', 'mmogameid=?', [$id], 'id');
+        if ($rinstance == 0) {
             return false;
         }
-        $rinstance = reset( $recs);
 
         require_once( "type/{$rinstance->type}/{$rinstance->type}_{$rinstance->model}.php");
 
@@ -265,6 +379,14 @@ class mmogame {
         return $class::get_new($db, $rgame, $rinstance);
     }
 
+    /**
+     * Fills the array $ret with info values`
+     *
+     * @param string $table
+     * @param int $mainid
+     * @param object $data
+     * @param array $ret
+     */
     public function json_items_table($table, $mainid, $data, &$ret) {
         $recs = $this->db->get_records_select( $table, 'mainid=?', [$mainid]);
 
@@ -279,20 +401,19 @@ class mmogame {
         return $recs;
     }
 
-    public function get_ginstanceid() {
-        return $this->rinstance->id;
-    }
-
-    public function get_ruser() {
-        return $this->db->get_record_select( 'mmogame_aa_users', 'id=?', [$this->auserid]);
-    }
-
+    /**
+     * Returns the next numattempt of the current game.
+     */
     public function compute_next_numattempt() {
         $rec = $this->db->get_record_select( $this->get_table_attempts(), 'ginstanceid=? AND numgame=? AND auserid=?',
             [$this->rinstance->id, $this->rinstance->numgame, $this->get_auserid()], 'MAX(numattempt) as maxnum');
         return $rec->maxnum + 1;
     }
 
+    /**
+     * Returns the default avatar for user auserid
+     * @param int $auserid
+     */
     protected function get_avatar_default($auserid) {
         // Compute default avatar.
         $db = $this->db;
@@ -338,6 +459,9 @@ class mmogame {
         return $avatarid;
     }
 
+    /**
+     * Returns the grade for user auserid
+     */
     public function get_grade($auserid) {
 
         $instance = $this->get_rinstance();
@@ -429,6 +553,9 @@ class mmogame {
         return $db->get_record_select( 'mmogame_aa_grades', 'id=?', [$id]);
     }
 
+    /**
+     * Returns info about avatar for the user auserid.
+     */
     public function get_avatar_info($auserid) {
         $sql = "SELECT g.*, a.directory, a.filename, a.id as aid, c.color1, c.color2, c.color3, c.color4, c.color5".
             " FROM {$this->db->prefix}mmogame_aa_grades g LEFT JOIN {$this->db->prefix}mmogame_aa_avatars a ON g.avatarid=a.id".
@@ -454,6 +581,12 @@ class mmogame {
         return $grade;
     }
 
+    /**
+     * Returns the rank for user $auserid based on $field
+     *
+     * @param int $auserid
+     * @param string $field
+     */
     public function get_rank_alone($auserid, $field) {
         $grade = $this->get_grade( $auserid);
 

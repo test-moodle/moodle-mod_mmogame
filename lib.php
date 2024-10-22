@@ -70,12 +70,6 @@ function mmogame_get_moodle_version() {
     }
 }
 
-function mmogame_get_subplugin_path( $gamekind) {
-    global $CFG;
-
-    return dirname(__FILE__).'/kind/'.$gamekind;
-}
-
 /**
  * Given an object containing all the necessary data, will create a new instance and return the id number of the new instance.
  *

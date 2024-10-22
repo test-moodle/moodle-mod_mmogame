@@ -15,9 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file contains the gate code
+ * This file contains the gate code thats clear saved user info.
  *
- * @package   mod_mmogame
+ * @package    mod_mmogame
+ * @copyright  2024 Vasilis Daloukas
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 ?>
@@ -35,7 +37,13 @@ document.getElementById("message").innerHTML = 'Player is changed';
 </script>
 
 <?php
-
+/**
+ * Removes ausersid, nickname, UserGUID from window.localStorage and goes to gate.php
+ *
+ * @package    mod_mmogame
+ * @copyright  2024 Vasilis Daloukas
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ **/
 if (array_key_exists( 'HTTPS', $_SERVER) && $_SERVER['HTTPS'] = 'On') {
     $url = 'https://';
 } else {

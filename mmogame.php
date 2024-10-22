@@ -235,7 +235,7 @@ class mmogame {
      * @param string $guid
      * @param boolean $create
      */
-    public static function get_auserid_from_guid($db, $guid, $create) {
+    public static function get_auserid_from_guid($db, $guid, $create = true) {
         $rec = $db->get_record_select( 'mmogame_aa_users_guid', 'guid=?', [$guid]);
         if ($rec === false) {
             if ($create == false) {
@@ -369,7 +369,7 @@ class mmogame {
         }
 
         $rinstance = $db->get_record_select_first( 'mmogame_aa_instances', 'mmogameid=?', [$id], 'id');
-        if ($rinstance == 0) {
+        if ($rinstance === false) {
             return false;
         }
 
@@ -599,10 +599,20 @@ class mmogame {
             [$this->rinstance->id, $this->rinstance->numgame, $value]) + 1;
     }
 
+    /**
+     * Returns IP address of the client.
+     *
+     * @return string
+     */
     public static function get_ip() {
         return $_SERVER['REMOTE_ADDR'];
     }
 
+    /**
+     * Returns the available avatars for user auserid.
+     *
+     * @param int auserid
+     */
     public function get_avatars($auserid) {
         $info = $this->get_avatar_info( $auserid);
 
@@ -619,6 +629,13 @@ class mmogame {
         return $ret;
     }
 
+    /**
+     * Set the nickname and avatar for the user auserid.
+     *
+     * @param int $auserid
+     * @param string $nickname
+     * @param int avatarid
+     */
     public function set_avatar($auserid, $nickname, $avatarid) {
         $info = $this->get_avatar_info( $auserid);
         $instance = $this->get_rinstance();
@@ -649,6 +666,12 @@ class mmogame {
         }
     }
 
+    /**
+     * Returns the available color palettes for the user auserid.
+     *
+     * @param int $auserid
+     * @return array with id in key and 5 colors at value
+     */
     public function get_palettes($auserid) {
         $info = $this->get_avatar_info( $auserid);
 
@@ -661,11 +684,23 @@ class mmogame {
         return $ret;
     }
 
+    /**
+     * Set the colorpaletterid for the user auserid.
+     *
+     * @param int $auserid
+     * @param int colorpaletteid
+     */
     public function set_colorpalette($auserid, $colorpaletteid) {
         $info = $this->get_avatar_info( $auserid);
         $this->db->update_record( 'mmogame_aa_grades', ['id' => $info->id, 'colorpaletteid' => $colorpaletteid]);
     }
 
+    /**
+     * Returns fastjson=unique string for fast checking.
+     *
+     * @param int $id (put at the end of return value)
+     * @param string (a unique string)
+     */
     protected function get_fastjson_default($id) {
         $s = dechex( mt_rand( 1, 15));
         for ($i = 1; $i <= MMOGAME_FASTJSON_LENGTH1; $i++) {
@@ -674,6 +709,12 @@ class mmogame {
         return $s.dechex( $id);
     }
 
+    /**
+     * Writes $filecontents in the state file.
+     *
+     * @param int $state
+     * @param string $fielcontents
+     */
     public function save_state_file($state, $filecontents) {
         global $CFG;
 
@@ -707,6 +748,14 @@ class mmogame {
         return $newdir;
     }
 
+    /**
+     * Saves state info for fast communication with clients.
+     *
+     * @param int $state
+     * @param string $statecontents
+     * @param filecontents
+     * @param int timefastjson
+     */
     public function save_state($state, $statecontents, $filecontents, $timefastjson) {
 
         $newdir = $this->save_state_file( $state, $filecontents);
@@ -729,6 +778,21 @@ class mmogame {
         }
     }
 
+    /**
+     * Sorts 5 colors in order of hue and returns the smaller hue.
+     *
+     * @param int $color1
+     * @param int $color2
+     * @param int $color3
+     * @param int $color4
+     * @param int $color5
+     * @param int $colorsort1
+     * @param int $colorsort2
+     * @param int $colorsort3
+     * @param int $colorsort4
+     * @param int $colorsort5
+     * @return float the smaller hue
+     */
     public static function compute_hue($color1, $color2, $color3, $color4, $color5, &$colorsort1, &$colorsort2,
         &$colorsort3, &$colorsort4, &$colorsort5) {
 
@@ -743,10 +807,25 @@ class mmogame {
         return self::calcualtehue( $colorsort1);
     }
 
+
+    /**
+     * Compare the contrast of $a and $b and returns -1,0 or 1.
+     *
+     * @param int $a
+     * @param int $b
+     * @return int (the result of comparison)
+     */
     public static function usort_mmogame_palettes_contrast($a, $b) {
         return self::get_contrast( $a) <=> self::get_contrast( $b);
     }
 
+    /**
+     * Compare the contrast of $a and $b and returns -1,0 or 1.
+     *
+     * @param string $a
+     * @param string $b
+     * @return int (the result of comparison)
+     */
     public static function get_contrast($color) {
         $red    = ( $color >> 16 ) & 0xFF;    // Red is the Left Most Byte.
         $green  = ( $color >> 8 ) & 0xFF;     // Green is the Middle Byte.
@@ -755,6 +834,12 @@ class mmogame {
         return (($red * 299) + ($green * 587) + ($blue * 114)) / 1000;
     }
 
+    /**
+     * Returns the hue of a color
+     *
+     * @param string $color
+     * @return double
+     */
     public static function calcualtehue($color) {
         $red    = ( $color >> 16 ) & 0xFF;    // Red is the Left Most Byte.
         $green  = ( $color >> 8 ) & 0xFF;     // Green is the Middle Byte.
@@ -789,11 +874,23 @@ class mmogame {
         return $hue;
     }
 
+    /**
+     * Update state in database.
+     *
+     * @param int $state
+     */
     public function update_state($state) {
         $this->rstate->state = $state;
         $this->db->update_record( 'mmogame_aa_states', ['id' => $this->rstate->id, 'state' => $state]);
     }
 
+    /**
+     * If nickname is empty creates a new one based on the $filename.
+     *
+     * @param string $nickname
+     * @param string $filename
+     * @return string (the repaired nickname)
+     */
     public static function repair_nickname($nickname, $filename) {
         if ($nickname != '' && $nickname != null) {
             return $nickname;
@@ -804,6 +901,14 @@ class mmogame {
         return $pos != false ? substr( $filename, 0, $pos) : $filename;
     }
 
+    /**
+     * Returns a new unique pin of mmogame with id=$mmogameid
+     *
+     * @param int $mmogameid
+     * @param object $db
+     * @param $digits (number of digits for new pin)
+     * @return int (the new pin)
+     */
     public static function get_newpin($mmogameid, $db, $digits) {
         $min = pow( 10, $digits - 1) + 1;
         $max = pow( 10, $digits) - 1;

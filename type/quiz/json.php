@@ -78,8 +78,6 @@ function mmogame_json_quiz_answer( $data, $game, &$ret) {
         if ($attempt->auserid != $auserid || $attempt->ginstanceid != $instance->id || $attempt->numgame != $instance->numgame) {
             return;
         }
-
-        $game->set_attempt( $attempt);
     }
 
     $query = $game->get_qbank()->load( $attempt->queryid);

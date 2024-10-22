@@ -35,26 +35,30 @@ require_once($CFG->dirroot . '/mod/mmogame/locallib.php');
 require_once($CFG->dirroot . '/mod/mmogame/database/moodle.php');
 require_once($CFG->dirroot . '/mod/mmogame/mmogame.php');
 
+/**
+ * class mod_mmogame_mod_form extends class moodleform_mod
+ *
+ * @package    mod_mmogame
+ * @copyright  2024 Vasilis Daloukas
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class mod_mmogame_mod_form extends moodleform_mod {
     /** @var array options to be used with date_time_selector fields in the mmogame. */
     public static $datefieldoptions = ['optional' => true];
 
-    protected $gamekind;
-
     /** @var int the max number of attempts allowed in any user or group override on this mmogame. */
     protected $maxattemptsanyoverride = null;
-    protected $categories = [];
 
-    public function get_courseid() {
-        global $COURSE;
-
-        return $COURSE->id;
-    }
-
+    /**
+     * Return the id.
+     */
     public function get_id() {
         return $this->_instance;
     }
 
+    /**
+     * Definition of form.
+     */
     protected function definition() {
         global $COURSE, $CFG, $DB, $PAGE;
         $mform = $this->_form;
@@ -101,6 +105,11 @@ class mod_mmogame_mod_form extends moodleform_mod {
         $this->add_action_buttons();
     }
 
+    /**
+     * Definition for params abouts models
+     *
+     * @param $mform
+     */
     protected function definition_models($mform) {
         global $CFG;
 
@@ -144,6 +153,11 @@ class mod_mmogame_mod_form extends moodleform_mod {
             get_string('yesno', 'mmogame'), ['group' => 1], [0, 1]);
     }
 
+    /**
+     * data_preprocessing
+     *
+     * @param stdClass $toform
+     */
     public function data_preprocessing(&$toform) {
         if (isset($toform['grade'])) {
             // Convert to a real number, so we don't get 0.0000.
@@ -156,6 +170,14 @@ class mod_mmogame_mod_form extends moodleform_mod {
         }
     }
 
+    /**
+     * validation
+     *
+     * @param stdClass $data
+     * @param array $files
+     *
+     * @return moodle_url
+     */
     public function validation($data, $files) {
 
         $errors = parent::validation($data, $files);
@@ -218,9 +240,6 @@ class mod_mmogame_mod_form extends moodleform_mod {
 
     /**
      * Computes the categories of all question of the current course;
-     *
-     * @param int $courseid
-     * @param string $gamekind
      *
      * @return array of question categories
      */
@@ -289,6 +308,11 @@ class mod_mmogame_mod_form extends moodleform_mod {
         parent::set_data($defaultvalues);
     }
 
+    /**
+     * Set data about categories
+     *
+     * @param array $defaultvalues
+     */
     public function set_data_categories(&$defaultvalues) {
         global $CFG, $DB;
 
@@ -376,14 +400,10 @@ class mod_mmogame_mod_form extends moodleform_mod {
     }
 
     /**
-     * Computes the categories of all question of the current course;
-     *
-     * @param int $courseid
-     * @param string $gamekind
+     * Computes the categories of all question of the current course
      *
      * @return array of question categories
      */
-
     public function definition_question(&$mform) {
         $numcategories = 3;
 
@@ -395,6 +415,11 @@ class mod_mmogame_mod_form extends moodleform_mod {
         }
     }
 
+    /**
+     * Show fields about selecting glossaries
+     *
+     * @return array of question categories
+     */
     public function definition_glossary(&$mform) {
         global $DB, $COURSE, $CFG;
 
@@ -420,109 +445,4 @@ class mod_mmogame_mod_form extends moodleform_mod {
         $mform->addElement('selectyesno', 'glossaryonlyapproved', get_string('glossary_only_approved', 'mmogame'));
         $mform->hideIf('glossaryonlyapproved', 'qbank', 'neq', 'moodleglossary');
     }
-}
-
-function mmogamekind_set_data_group(&$defaultvalues) {
-    global $DB;
-
-    $mmogameid = $defaultvalues->id;
-
-    $n = 0;
-    $recs = $DB->get_records_select( 'mmogame_aa_groups', 'mmogameid=?', [$mmogameid], 'sortorder');
-    foreach ($recs as $rec) {
-        $n++;
-        $name = 'groupname'.$n;
-        $defaultvalues->$name = $rec->name;
-        $name = 'enrolmentkey'.$n;
-        $defaultvalues->$name = $rec->enrolmentkey;
-        $name = 'groupid'.$n;
-        $defaultvalues->$name = $rec->id;
-    }
-}
-
-/**
- * Set data
- *
- * @param array $defaultvalues
- */
-function mmogamekind_set_data($kind, &$defaultvalues) {
-    global $DB;
-
-    if (isset( $defaultvalues->id)) {
-        if (!isset( $defaultvalues->kindgroup)) {
-            $rec = $DB->get_record_select( 'mmogame_'.$kind, 'id=?', [$defaultvalues->id]);
-            if ($rec != false) {
-                if (!isset( $defaultvalues->kindgroup)) {
-                    $defaultvalues->kindgroup = $rec->kindgroup;
-                }
-                if (!isset( $defaultvalues->countgroup)) {
-                    $defaultvalues->countgroup = $rec->countgroup;
-                }
-
-                mmogamekind_set_data_group( $defaultvalues);
-            }
-        }
-    }
-}
-
-function mmogamekind_form_definition_add_kindgroup($gameform, $mform, $kind, $title=false, $new=false) {
-    global $DB;
-
-    $options = [];
-    $options[MMOGAME_KIND_COMMON_GROUP_AUTO] = get_string('kindgroup_auto', 'mmogame');
-    $options[MMOGAME_KIND_COMMON_GROUP_MANUAL] = get_string('kindgroup_manual', 'mmogame');
-    $options[MMOGAME_KIND_COMMON_GROUP_KEY] = get_string('kindgroup_key', 'mmogame');
-    $options[MMOGAME_KIND_COMMON_GROUP_USER] = get_string('kindgroup_user', 'mmogame');
-    if ($new != false) {
-        foreach ($new as $key => $value) {
-            $options[$key] = $value;
-        }
-    }
-    $mform->addElement('select', 'kindgroup', $title != '' ? $title : get_string('kindgroup', 'mmogame'), $options);
-
-    $mform->addElement('text', 'countgroup', get_string( 'countgroup', 'mmogame'), ['size' => 4]);
-    $mform->setType('countgroup', PARAM_INT);
-
-    $id = $gameform->get_id();
-    if ($id != 0) {
-        $rec = $DB->get_record_select( 'mmogame_'.$kind, 'id=?', [$id]);
-        $n = $rec != false ? $rec->countgroup : 0;
-    } else {
-        $n = 0;
-    }
-    $mform->addElement('hidden', 'countgroup2', $n);
-    $mform->setType('countgroup2', PARAM_INT);
-
-    for ($i = 1; $i <= $n; $i++) {
-        $pagegroup = [];
-
-        $pagegroup[] = $mform->createElement('text', 'groupname'.$i, '', ['size' => 10]);
-        $mform->setType('groupname'.$i, PARAM_TEXT);
-
-        $pagegroup[] = $mform->createElement('text', 'enrolmentkey'.$i, '', ['size' => 10]);
-        $mform->setType('enrolmentkey'.$i, PARAM_TEXT);
-        $mform->addGroup($pagegroup, 'group'.$i,
-            get_string( 'groupname', 'mmogame').$i.' / '.
-            get_string( 'enrolmentkey', 'mmogame'), null, false);
-
-        $mform->addElement('hidden', 'groupid'.$i, 0);
-        $mform->setType('groupid'.$i, PARAM_INT);
-    }
-}
-
-function mmogame_get_list_users($courseid) {
-    global $CFG, $DB;
-
-    $context = context_course::instance( $courseid);
-
-    $sql = "SELECT DISTINCT u.id, u.lastname, u.firstname ".
-        " FROM {$CFG->prefix}role_assignments ra, {$CFG->prefix}user u".
-        ' WHERE ra.userid=u.id AND ra.contextid=?';
-    $recs = $DB->get_records_sql( $sql, [$context->id]);
-    $ret = [];
-    foreach ($recs as $rec) {
-        $ret[$rec->id] = $rec->lastname.' '.$rec->firstname;
-    }
-
-    return $ret;
 }

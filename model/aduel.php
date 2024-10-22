@@ -23,9 +23,23 @@
  */
 define( 'ERROR_ADUEL_USER2_NULL', 'aduel_user2_null');
 
+/**
+ * The class mmogameModel_aduel has the code for model ADuel
+ *
+ * @package    mod_mmogame
+ * @copyright  2024 Vasilis Daloukas
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class mmogameModel_aduel {
 
-    public static function json_getadmin( $data, $game, &$ret) {
+    /**
+     * Return info for administrator
+     *
+     * @param object $data (not used)
+     * @param game object $game
+     * @param array $ret
+     */
+    public static function json_getadmin($data, $game, &$ret) {
         $instance = $game->get_rinstance();
         $state = $ret['state'] = $game->get_rstate()->state;
 
@@ -36,7 +50,13 @@ class mmogameModel_aduel {
             [$instance->id, $instance->numgame]);
     }
 
-    public static function json_setadmin( $data, $game) {
+    /**
+     * Administrator can change numgame or state
+     *
+     * @param object $data
+     * @param game object $game
+     */
+    public static function json_setadmin($data, $game) {
         $instance = $game->get_rinstance();
 
         $ret = [];
@@ -55,7 +75,14 @@ class mmogameModel_aduel {
         }
     }
 
-    public static function get_aduel( $mmogame, &$newplayer1, &$newplayer2) {
+    /**
+     * Return the aduel record for current $mmogame record
+     *
+     * @param object $mmogame
+     * @param int $newplayer1
+     * @param int $newplayer2
+     */
+    public static function get_aduel($mmogame, &$newplayer1, &$newplayer2) {
         $newplayer1 = $newplayer2 = false;
         $auserid = $mmogame->get_auserid();
         $db = $mmogame->get_db();
@@ -140,7 +167,14 @@ class mmogameModel_aduel {
         return $rec;
     }
 
-    public static function get_aduel_new( $mmogame, &$newplayer1, $stat) {
+    /**
+     * Return the new aduel record for current $mmogame
+     *
+     * @param object $mmogame
+     * @param int $newplayer1
+     * @param object $stat (the record of table mmogame_aa_stats)
+     */
+    public static function get_aduel_new($mmogame, &$newplayer1, $stat) {
         $rinstance = $mmogame->get_rinstance();
         $db = $mmogame->get_db();
 
@@ -159,7 +193,22 @@ class mmogameModel_aduel {
         return $db->get_record_select( 'mmogame_am_aduel_pairs', 'id=?', [$id]);
     }
 
-    public static function finish_attempt( $mmogame, $aduel, $iscorrect1, $iscorrect2,
+    /**
+     * Finishes attempt
+     *
+     * @param object $mmogame
+     * @param object $aduel
+     * @param boolean $iscorrect1
+     * @param boolean $iscorrect2
+     * @param boolean $isclosed1
+     * @param boolean $isclosed2
+     * @param int $scorewin (score if first player wins)
+     * @param int $scoreloss (score if first player loses)
+     * @param int $scoredraw (score if it a draw)
+     * @param int $adueladdscore
+     * @param int (the score)
+     */
+    public static function finish_attempt($mmogame, $aduel, $iscorrect1, $iscorrect2,
     $isclosed1, $isclosed2, $scorewin, $scorelose, $scoredraw, &$adueladdscore) {
         $score1 = $iscorrect1 == $iscorrect2 ? ($iscorrect1 ? $scoredraw : $scorelose) : ($iscorrect1 ? $scorewin : $scorelose);
         $mmogame->get_qbank()->update_grades( $aduel->auserid1, $score1, 0, 1);
@@ -175,7 +224,14 @@ class mmogameModel_aduel {
         return $mmogame->get_auserid() == $aduel->auserid1 ? $score1 : $score2;
     }
 
-    public static function get_attempt( $game, $aduel) {
+    /**
+     * Return an attempt record of the game
+     *
+     * @param object $mmogame
+     * @param object $aduel
+     * @return object (the attempt record)
+     */
+    public static function get_attempt($game, $aduel) {
 
         $table = $game->get_table_attempts();
         $instance = $game->get_rinstance();
@@ -213,7 +269,12 @@ class mmogameModel_aduel {
         return false;
     }
 
-    public static function delete( $game) {
-        $game->get_db()->delete_records_select( 'mmogame_am_aduel_pairs', 'id=?', [$game->get_aduel()->id]);
+    /**
+     * Deletes all pairs (table mmogame_am_aduel_pairs)
+     *
+     * @param object $mmogame
+     */
+    public static function delete($mmogame) {
+        $game->get_db()->delete_records_select( 'mmogame_am_aduel_pairs', 'id=?', [$mmogame->get_aduel()->id]);
     }
 }

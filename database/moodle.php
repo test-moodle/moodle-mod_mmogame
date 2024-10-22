@@ -24,20 +24,42 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * This is the base class for database access.
+ */
 class mmogame_database {
 
 };
 
+
+/**
+ * This class extends the mmogame_database with code explicit with Moodle.
+ */
 class mmogame_database_moodle extends mmogame_database {
 
+    /**
+     * The prefix of tables.
+     *
+     * @var string $prefix
+     */
     public $prefix;
 
+    /**
+     * Constructor.
+     */
     public function __construct() {
         global $CFG;
 
         $this->prefix = $CFG->prefix;
     }
 
+    /**
+     * This function insert a record in database.
+     *
+     * @param string $table.
+       @param array $a.
+       @return true if the insertions is ok, otherwise false.
+     */
     public function insert_record($table, $a) {
         global $DB;
 
@@ -48,6 +70,13 @@ class mmogame_database_moodle extends mmogame_database {
         return $DB->insert_record( $table, $rec);
     }
 
+    /**
+     * For rare cases when you also need to specify the ID of the record to be inserted.
+     *
+     * @param string $table.
+       @param array $a.
+       @return true if the insertions is ok, otherwise false.
+     */
     public function insert_record_raw($table, $a, $returnid, $customsequence) {
         global $DB;
 
@@ -58,19 +87,45 @@ class mmogame_database_moodle extends mmogame_database {
         return $DB->insert_record_raw( $table, $rec, $returnid, false, $customsequence);
     }
 
+    /**
+     * If you need to perform a complex update using arbitrary SQL, you can use the low level "execute" method.
+        Only use this when no specialised method exists.
+     *
+     * @param string $sql.
+       @param array $params.
+     */
     public function execute($sql, $params=null) {
         global $DB;
 
         $DB->execute( $sql, $params);
     }
 
-    public function get_record_select($table, $select, array $params=null, $fields='*') {
+    /**
+     * Return a single database record as an object where the given conditions are used in the WHERE clause.
+     *
+     * @param string $table.
+       @param string $select.
+       @param array $params.
+       @param string $fields.
+       @return object.
+     */
+    public function get_record_select($table, $select, ?array $params=null, $fields='*') {
         global $DB;
 
         return $DB->get_record_select( $table, $select, $params, $fields);
     }
 
-    public function get_record_select_first($table, $select, array $params=null, $sort, $fields='*') {
+    /**
+     * Returns the first record of given creteria.
+     *
+     * @param string $table.
+       @param string $select.
+       @param array $params.
+       @param string $sort.
+       @param string $fields.
+       @return object.
+     */
+    public function get_record_select_first($table, $select, ?array $params=null, $sort='', $fields='*') {
         global $DB;
 
         $recs = $DB->get_records_select( $table, $select, $params, $sort, $fields, 0, 1);
@@ -80,30 +135,73 @@ class mmogame_database_moodle extends mmogame_database {
         return false;
     }
 
-    public function get_records_select($table, $select, array $params=null, $sort='', $fields='*', $limitfrom=0, $limitnum=0) {
+    /**
+     * Return a list of records as an array of objects where the given conditions are used in the WHERE clause.
+     *
+     * @param string $table.
+       @param string $select.
+       @param array $params.
+       @param string $sort.
+       @param string $fields.
+       @param int $limitfrom.
+       @param int $limitto.
+       @return object.
+     */
+    public function get_records_select($table, $select, ?array $params=null, $sort='', $fields='*', $limitfrom=0, $limitnum=0) {
         global $DB;
 
         return $DB->get_records_select( $table, $select, $params, $sort, $fields, $limitfrom, $limitnum);
     }
 
-    public function count_records_select($table, $select, array $params=null, $countitem="COUNT('*')") {
+    /**
+     * Count the records in a table where the given conditions are used in the WHERE clause.
+     *
+     * @param string $table.
+       @param string $select.
+       @param array $params.
+       @param string $countitem.
+       @return int.
+     */
+    public function count_records_select($table, $select, ?array $params=null, $countitem="COUNT('*')") {
         global $DB;
 
         return $DB->count_records_select( $table, $select, $params, $countitem);
     }
 
-    public function get_record_sql($sql, array $params=null) {
+    /**
+     * Return a single database record as an object using a custom SELECT query.
+     *
+     * @param string $sql.
+       @param array $params.
+       @return object.
+     */
+    public function get_record_sql($sql, ?array $params=null) {
         global $DB;
 
         return $DB->get_record_sql($sql, $params);
     }
 
-    public function get_records_sql($sql, array $params=null, $limitfrom=0, $limitnum=0) {
+    /**
+     * Return a list of records as an array of objects using a custom SELECT query.
+     *
+     * @param string $sql.
+       @param array $params.
+       @param int limitfrom.
+       @param int limitto.
+       @return array.
+     */
+    public function get_records_sql($sql, ?array $params=null, $limitfrom=0, $limitnum=0) {
         global $DB;
 
         return $DB->get_records_sql($sql, $params, $limitfrom, $limitnum);
     }
 
+    /**
+     * Update a record in the table. The data object must have the property "id" set.
+     *
+     * @param string $table.
+       @param array $a.
+     */
     public function update_record($table, $a) {
         global $DB;
 
@@ -115,12 +213,27 @@ class mmogame_database_moodle extends mmogame_database {
         $DB->update_record( $table, $rec);
     }
 
-    public function delete_records_select($table, $select, array $params=null) {
+    /**
+     * Delete records from the table where the given conditions are used in the WHERE clause.
+     *
+     * @param string $table.
+       @param string $select.
+       @param array params.
+     */
+    public function delete_records_select($table, $select, ?array $params=null) {
         global $DB;
 
         $DB->delete_records_select($table, $select, $params);
     }
 
+    /**
+     * Returns the equivalent of if in database.
+     *
+     * @param string $condition.
+       @param string $iftrue.
+       @param string iffalse.
+       @return string.
+     */
     public function iif($condition, $iftrue, $iffalse) {
         return "IF($condition,$iftrue,$iffalse)";
     }

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * MMOGame class
+ * MMOGame class.
  *
  * @package    mod_mmogame
  * @copyright  2024 Vasilis Daloukas
@@ -59,7 +59,6 @@ $rgame = $DB->get_record_select( 'mmogame', 'id=?', [$rinstance->mmogameid]);
 
 <?php
 
-
 $game = mmogame::getgame( $db, $rgame->id, $pin);
 $type = $game->get_type();
 $color = $DB->get_record_select( 'mmogame_aa_colorpalettes', 'id=?', [2]);
@@ -84,8 +83,20 @@ mmogame_change_javascript( $rinstance->type, "type/{$rinstance->type}/js/{$rinst
             {$rinstance->pin},{$usercode},\"{$rinstance->kinduser}\"" ?>);
     }
 </script>
-<?php
 
+<?php
+/**
+ * Reads a javascript file and changes some string for translation replacing [LANG_...], [LANGM_...], [CLASS].
+ *
+ * @param string $type (type is a sub-plugin name e.g. quiz).'
+ * @param string $file
+ * @param string $search
+ * @param string $replace
+ *
+ * @package    mod_mmogame
+ * @copyright  2024 Vasilis Daloukas
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ **/
 function mmogame_change_javascript( $type, $file, $search = '', $replace = '') {
     if (!file_exists( dirname(__FILE__).'/'.$file)) {
         return;

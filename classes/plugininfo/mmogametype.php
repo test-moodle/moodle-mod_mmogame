@@ -25,11 +25,14 @@ namespace mod_mmogame\plugininfo;
 
 use core\plugininfo\base;
 
+/**
+ * The class mmogametype extents base.
+ */
 class mmogametype extends base {
+    /**
+     * Returns always true.
+     */
     public function is_uninstall_allowed() {
-        if ($this->is_standard()) {
-            return false;
-        }
         return true;
     }
 }

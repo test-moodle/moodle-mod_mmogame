@@ -59,6 +59,11 @@ function xmldb_mmogame_install() {
     return true;
 }
 
+/**
+ * Function copy data from .cvs file to a table.
+ *
+ * @param string $table
+ */
 function xmldb_mmogame_install_import( $table) {
     global $DB;
 
@@ -91,6 +96,9 @@ function xmldb_mmogame_install_import( $table) {
     return true;
 }
 
+/**
+ * Reads the avatars in the assets/avatars director and inserts a corresponging record to table aa_mmogame_avatars.
+ */
 function xmldb_mmogame_install_avatars() {
     global $DB;
 

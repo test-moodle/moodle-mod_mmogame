@@ -17,9 +17,9 @@
 /**
  * This file is the entry point to the mmogame module. All pages are rendered from here
  *
- * @package mod_mmogame
- * @copyright 2019 Vasilis Daloukas
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or late
+ * @package    mod_mmogame
+ * @copyright  2024 Vasilis Daloukas
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 require_once(dirname(__FILE__) . '/../../config.php');

@@ -267,14 +267,14 @@ class mmogame_quiz_alone extends mmogame_quiz {
         $ret['kinds'] = implode( '#', $kinds);
         $ret['avatars'] = implode( '#', $avatars);
     }
-    
+
     /**
      * Do nothing on this model.
      */
     public function set_attempt($attempt) {
 
     }
-    
+
     /**
      * Updates the database and array $ret about the correctness of user's answer
      *
@@ -282,7 +282,7 @@ class mmogame_quiz_alone extends mmogame_quiz {
      * @param array &$ret
      * @return object: the attempt
      */
-    public function set_answer_model( $data, &$ret) {
+    public function set_answer_model($data, &$ret) {
         if (!isset( $data->attempt) || $data->attempt == 0) {
             return false;
         }
@@ -293,7 +293,8 @@ class mmogame_quiz_alone extends mmogame_quiz {
             return false;
         }
 
-        if ($attempt->auserid != $this->auserid || $attempt->ginstanceid != $this->rinstance->id || $attempt->numgame != $this->rinstance->numgame) {
+        if ($attempt->auserid != $this->auserid || $attempt->ginstanceid != $this->rinstance->id
+        || $attempt->numgame != $this->rinstance->numgame) {
             return false;
         }
         $this->set_attempt( $attempt);
@@ -318,7 +319,7 @@ class mmogame_quiz_alone extends mmogame_quiz {
 
         $ret['percentcompleted'] = $info->percentcompleted;
         $ret['completedrank'] = $this->get_rank_alone( $this->auserid, 'percentcompleted');
-        
+
         return $attempt;
     }
 }

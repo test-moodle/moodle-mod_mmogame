@@ -541,7 +541,7 @@ class mmogame_quiz_aduel extends mmogame_quiz_alone {
 
         return count( $ret) ? $ret : false;
     }
-    
+
     /**
      * Updates the database and array $ret about the correctness of user's answer
      *
@@ -549,9 +549,9 @@ class mmogame_quiz_aduel extends mmogame_quiz_alone {
      * @param array &$ret
      * @return object: the attempt
      */
-    public function set_answer_model( $data, &$ret) { 
+    public function set_answer_model($data, &$ret) { 
         $attempt = parent::set_answer_model( $data, $ret);
-        
+
         $aduel = $this->aduel;
 
         $player = ( $aduel->auserid1 == $this->auserid ? 1 : 2);
@@ -594,5 +594,5 @@ class mmogame_quiz_aduel extends mmogame_quiz_alone {
         $ret['aduel_rank'] = $this->get_rank_alone( $aduel->auserid1, 'sumscore');
 
         return $attempt;
-    }    
+    }
 }

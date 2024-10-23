@@ -28,5 +28,5 @@ $plugin->component = 'mod_mmogame';  // Full name of the plugin (used for diagno
 $plugin->version   = 2024102201;  // The current module version (Date: YYYYMMDDXX).
 $plugin->requires  = 2010112400;  // Requires Moodle 2.0.
 $plugin->cron      = 0;           // Period for cron to check this module (secs).
-$plugin->release   = '2024-10-20';
+$plugin->release   = '2024-10-22';
 $plugin->maturity = MATURITY_STABLE;

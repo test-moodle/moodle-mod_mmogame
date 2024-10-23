@@ -541,4 +541,58 @@ class mmogame_quiz_aduel extends mmogame_quiz_alone {
 
         return count( $ret) ? $ret : false;
     }
+    
+    /**
+     * Updates the database and array $ret about the correctness of user's answer
+     *
+     * @param object $data
+     * @param array &$ret
+     * @return object: the attempt
+     */
+    public function set_answer_model( $data, &$ret) { 
+        $attempt = parent::set_answer_model( $data, $ret);
+        
+        $aduel = $this->aduel;
+
+        $player = ( $aduel->auserid1 == $this->auserid ? 1 : 2);
+        $ret['aduel_player'] = $player;
+
+        if (isset( $data->subcommand) && $data->subcommand === 'tool2') {
+            $field = 'tool2numattempt'.$player;
+            if ($aduel->$field == 0) {
+                $game->get_db()->update_record( 'mmogame_am_aduel_pairs',
+                    ['id' => $aduel->id, $field => $attempt->numattempt]);
+                $aduel->$field = $attempt->numattempt;
+            }
+
+            if ($aduel->$field != 0 && $aduel->$field != null) {
+                $ret['tool2'] = $aduel->$field;
+            }
+        }
+
+        if ($aduel->auserid1 == $this->auserid) {
+            return;
+        }
+
+        $attempt1 = $this->db->get_record_select( 'mmogame_quiz_attempts',
+            'ginstanceid=? AND auserid=? AND numteam=? AND numattempt=?',
+            [$aduel->ginstanceid, $aduel->auserid1, $aduel->id, $attempt->numattempt]);
+        if ($attempt1 != false) {
+            if ($aduel->auserid2 == $this->auserid) {
+                $ret['aduel_iscorrect'] = $attempt1->iscorrect;
+                $ret['aduel_useranswer'] = $attempt1->useranswer;
+            }
+
+            $query = $this->qbank->load( $attempt->queryid);
+            $ret['correct'] = $query->concept;
+        }
+        if ($aduel->isclosed2) {
+            $ret['endofgame'] = 1;
+        }
+        $info = $this->get_avatar_info( $aduel->auserid1);
+        $ret['aduel_score'] = $info->sumscore;
+        $ret['aduel_rank'] = $this->get_rank_alone( $aduel->auserid1, 'sumscore');
+
+        return $attempt;
+    }    
 }

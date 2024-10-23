@@ -146,9 +146,6 @@ class mmogameModel_aduel {
             $map[$key] = $rec;
         }
         ksort( $map);
-        foreach ($recs as $rec) {
-            $debug .= ($debug != '' ? ', ' : '')."{$rec->auserid1}:".round( $rec->percent, 3);
-        }
 
         foreach ($map as $rec) {
             break;

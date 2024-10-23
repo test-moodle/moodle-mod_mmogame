@@ -276,7 +276,7 @@ class mmogame_quiz_aduel extends mmogame_quiz {
             }
         }
 
-    this.disableInput()
+        this.disableInput()
         this.buttonHighScore.style.visibility = 'visible';  
 
         this.isWaitOponent = false;

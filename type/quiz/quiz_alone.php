@@ -267,4 +267,58 @@ class mmogame_quiz_alone extends mmogame_quiz {
         $ret['kinds'] = implode( '#', $kinds);
         $ret['avatars'] = implode( '#', $avatars);
     }
+    
+    /**
+     * Do nothing on this model.
+     */
+    public function set_attempt($attempt) {
+
+    }
+    
+    /**
+     * Updates the database and array $ret about the correctness of user's answer
+     *
+     * @param object $data
+     * @param array &$ret
+     * @return object: the attempt
+     */
+    public function set_answer_model( $data, &$ret) {
+        if (!isset( $data->attempt) || $data->attempt == 0) {
+            return false;
+        }
+
+        $attempt = $this->db->get_record_select( 'mmogame_quiz_attempts', 'mmogameid=? AND auserid=? AND id=?',
+            [$this->get_id(), $this->auserid, $data->attempt]);
+        if ($attempt === false) {
+            return false;
+        }
+
+        if ($attempt->auserid != $this->auserid || $attempt->ginstanceid != $this->rinstance->id || $attempt->numgame != $this->rinstance->numgame) {
+            return false;
+        }
+        $this->set_attempt( $attempt);
+
+        $autograde = true;
+        $query = $this->qbank->load( $attempt->queryid);
+        if (isset( $data->subcommand) && $data->subcommand == 'tool2') {
+            $autograde = false;
+            $ret['tool2'] = 1;
+        }
+        $iscorrect = $this->set_answer( $attempt, $query, $data->answer, $autograde, $data->submit != 0, $ret);
+
+        $ret['iscorrect'] = $iscorrect ? 1 : 0;
+        $ret['correct'] = $query->concept;
+        $ret['submit'] = $data->submit;
+        $ret['attempt'] = $attempt->id;
+
+        $info = $this->get_avatar_info( $this->auserid);
+        $ret['sumscore'] = $info->sumscore;
+        $ret['nickname'] = $info->nickname;
+        $ret['rank'] = $this->get_rank_alone( $this->auserid, 'sumscore');
+
+        $ret['percentcompleted'] = $info->percentcompleted;
+        $ret['completedrank'] = $this->get_rank_alone( $this->auserid, 'percentcompleted');
+        
+        return $attempt;
+    }
 }

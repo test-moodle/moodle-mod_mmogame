@@ -28,9 +28,20 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once(dirname(__FILE__) . '/quiz.php');
 
+/**
+ * The class mmogame_quiz_alone play the game Quiz (Alone).
+ */
 class mmogame_quiz_alone extends mmogame_quiz {
+    /** @var callupdategrades: true if it can call function updategrades(). */
     protected $callupdategrades;
 
+    /**
+     * Constructor.
+     *
+     * @param object $db (the database)
+     * @param object $rgame (a record from table mmogame)
+     * @param object $rinstance (a record from table mmogame_aa_instances)
+     */
     public function __construct($db, $rgame, $rinstance) {
         $this->callupdategrades = true;
 
@@ -48,6 +59,11 @@ class mmogame_quiz_alone extends mmogame_quiz {
         parent::__construct($db, $rgame, $rinstance, null);
     }
 
+    /**
+     * Tries to find an attempt of open games, otherwise creates a new attempt.
+     *
+     * @return object (a new attempt of false if no attempt)
+     */
     public function get_attempt() {
         $attempt = $this->db->get_record_select( 'mmogame_quiz_attempts',
             'ginstanceid=? AND numgame=? AND auserid=? AND timeanswer=0',
@@ -65,6 +81,9 @@ class mmogame_quiz_alone extends mmogame_quiz {
         return $this->get_attempt_new_internal(null, 0, 0, 0);
     }
 
+    /**
+     * Set the state of current game.
+     */
     public function set_state_json($state, &$ret) {
         $timefastjson = round( microtime( true), 6);
 
@@ -74,6 +93,17 @@ class mmogame_quiz_alone extends mmogame_quiz {
         $this->save_state($state, $statecontents, $filecontents, $timefastjson);
     }
 
+    /**
+     * Saves informations about the user's answer.
+     *
+     * @param object $attempt
+     * @param object $query
+     * @param string $useranswer
+     * @param boolean $autograde
+     * @param boolean $submit
+     * @param array $ret (will contains all information)
+     * @return boolean (is correct or not)
+     */
     public function set_answer($attempt, $query, $useranswer, $autograde, $submit, &$ret) {
         if ($autograde) {
             $attempt->iscorrect = $this->qbank->is_correct( $query, $useranswer, $this, $a['fraction']);
@@ -138,21 +168,24 @@ class mmogame_quiz_alone extends mmogame_quiz {
         return $attempt->iscorrect;
     }
 
+    /**
+     * Return the score of user's answer.
+     *
+     * @return int (now uses negative grading, in the future user will can change it)
+     */
     protected function get_score_query($iscorrect, $query) {
         return $this->get_score_query_negative( $iscorrect, $query);
     }
 
-    public function set_timeout($attemptid) {
-        $attempt = $this->db->get_record_select( 'mmogame_quiz_attempts', 'id=?', [$attemptid]);
-
-        $this->db->update_record( 'mmogame_quiz_attempts', ['id' => $attemptid, 'timeanswer' => time()]);
-
-        return true;
-    }
-
-    public function get_highscore($input, &$ret) {
+    /**
+     * Fill the array $ret wirh information about high scores.
+     *
+     * @param
+     * @return int (now uses negative grading, in the future user will can change it)
+     */
+    public function get_highscore($count, &$ret) {
         $recs = $this->db->get_records_select( 'mmogame_aa_grades', 'ginstanceid=? AND numgame=? AND sumscore > 0',
-            [$this->rinstance->id, $this->rinstance->numgame], 'sumscore DESC', '*', 0, $input->count);
+            [$this->rinstance->id, $this->rinstance->numgame], 'sumscore DESC', '*', 0, $count);
         $map = [];
         $rank = 0;
         $prevscore = $prevrank = -1;
@@ -174,7 +207,7 @@ class mmogame_quiz_alone extends mmogame_quiz {
             $map[$rec->auserid] = $data;
         }
         $recs = $this->db->get_records_select( 'mmogame_aa_grades', 'ginstanceid=? AND numgame=? AND percentcompleted > 0',
-            [$this->rinstance->id, $this->rinstance->numgame], 'percentcompleted DESC', '*', 0, $input->count);
+            [$this->rinstance->id, $this->rinstance->numgame], 'percentcompleted DESC', '*', 0, $count);
         $prevscore = $prevrank = -1;
         $rank = 0;
         foreach ($recs as $rec) {

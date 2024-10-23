@@ -17,6 +17,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Library of functions and constants for sub-module Quiz
+ *
  * @package    mmogametype_quiz
  * @copyright  2024 Vasilis Daloukas
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -37,6 +39,12 @@ function mmogametype_quiz_delete_instance( $mmogameid, $instanceid) {
     }
 }
 
+/**
+ * Actual implementation of the reset course functionality, delete all the game responses for course $data->courseid.
+ *
+ * @param stdClass $data the data submitted from the reset course.
+ * @param string $ids: id of all mmogame that have to be deleted.
+ */
 function mmogametype_quiz_reset_userdata( $data, $ids) {
     global $CFG, $DB;
 
@@ -56,6 +64,11 @@ function mmogametype_quiz_reset_userdata( $data, $ids) {
     }
 }
 
+/**
+ * Return the models that this sub-plugin implements.
+ *
+ * @return array (model => name)
+ */
 function mmogametype_quiz_get_models() {
     return [
         'alone' => get_string( 'model_alone', 'mmogametype_quiz'),

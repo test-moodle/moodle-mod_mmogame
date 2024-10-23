@@ -17,9 +17,9 @@
 /**
  * This file is the entry point to the mmogame module. All pages are rendered from here
  *
- * @package mod_mmogame
- * @copyright 2024 Vasilis Daloukas
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or late
+ * @package    mod_mmogame
+ * @copyright  2024 Vasilis Daloukas
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 require_once(dirname(__FILE__) . '/../../config.php');
@@ -47,6 +47,6 @@ require_login($course->id, false, $cm);
 
 $mmogame = mmogame::getgame_first( new mmogame_database_moodle(), $cm->instance);
 
-if( $mmogame !== false) {
+if ($mmogame !== false) {
     require_once($CFG->dirroot.'/mod/mmogame/type/'.$mmogame->get_type().'/view.php');
 }

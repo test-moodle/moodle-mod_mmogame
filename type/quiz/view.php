@@ -43,7 +43,14 @@ if (has_capability('mod/mmogame:manage', $context)) {
     redirect( $url);
 }
 
-function mmogame_quiz_manage( $id, $mmogame, $url) {
+/**
+ * Creates the admin form.
+ *
+ * @param int $id
+ * @param object $mmogame
+ * @param string $url: url for playing the game
+ **/
+function mmogame_quiz_manage($id, $mmogame, $url) {
     global $OUTPUT;
 
     if (count( $_POST) > 0) {
@@ -62,7 +69,12 @@ function mmogame_quiz_manage( $id, $mmogame, $url) {
     echo $OUTPUT->footer();
 }
 
-function mmogame_quiz_manage_submit( $mmogame) {
+/**
+ * For admin form has the code for prev/next numgame and prev/next state.
+ *
+ * @param object $mmogame
+ **/
+function mmogame_quiz_manage_submit($mmogame) {
     global $DB;
 
     $state = $mmogame->get_state();

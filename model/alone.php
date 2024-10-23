@@ -22,8 +22,21 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+/**
+ * The class mmogameModel_alone has the code for model Alone
+ *
+ * @package    mod_mmogame
+ * @copyright  2024 Vasilis Daloukas
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class mmogameModel_alone {
-    public static function json_setadmin( $data, $game) {
+    /**
+     * Administrator can change numgame or state
+     *
+     * @param object $data
+     * @param game object $game
+     */
+    public static function json_setadmin($data, $game) {
         $instance = $game->get_rinstance();
 
         $ret = [];
@@ -41,7 +54,14 @@ class mmogameModel_alone {
         }
     }
 
-    public static function json_getadmin( $data, $game, &$ret) {
+    /**
+     * Return info for administrator
+     *
+     * @param object $data (not used)
+     * @param game object $game
+     * @param array $ret
+     */
+    public static function json_getadmin($data, $game, &$ret) {
         $instance = $game->get_rinstance();
 
         $state = $ret['state'] = $game->get_rstate()->state;

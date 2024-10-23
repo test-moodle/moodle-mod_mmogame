@@ -170,5 +170,5 @@ function mmogame_json_quiz_gethighscore($data, $game, &$ret) {
     $auserid = mmogame::get_asuerid_from_object( $game->get_db(), $data, $game->get_rinstance());
     $game->login_user( $auserid);
     $instance = $game->get_rinstance();
-    $game->get_highscore( $data, $ret);
+    $game->get_highscore( $data->count, $ret);
 }

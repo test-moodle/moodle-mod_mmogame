@@ -33,13 +33,13 @@ require_once(dirname(__FILE__) . '/locallib.php');
 $id = required_param('id', PARAM_INT); // Is mmoGame Module ID.
 
 if (! $cm = get_coursemodule_from_id('mmogame', $id)) {
-    print_error('invalidcoursemodule id='.$id);
+    throw new moodle_exception('invalidcoursemoduleid', 'error', '', null, $id);
 }
 if (! $course = $DB->get_record('course', ['id' => $cm->course])) {
-    print_error('coursemisconf');
+    throw new moodle_exception('coursemisconf', 'error', '', $cm->course);
 }
 if (! $mmogame = $DB->get_record('mmogame', ['id' => $cm->instance])) {
-    print_error('invalidcoursemodule');
+    throw new moodle_exception('invalidcoursemoduleid', 'error', '', $cm->instance);
 }
 
 // Check login and get context.

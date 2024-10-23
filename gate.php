@@ -77,7 +77,7 @@ mmogame_change_javascript( $rinstance->type, "type/{$rinstance->type}/js/{$rinst
 
 ?>
     function runmmogame() {
-        let game = new mmogame_gate();
+        let game = new mmogameGate();
         game.repairColors( <?php echo $colors;?>)
         game.open(<?php echo "\"{$CFG->wwwroot}/mod/mmogame/json.php\",{$rgame->id},
             {$rinstance->pin},{$usercode},\"{$rinstance->kinduser}\"" ?>);
@@ -104,6 +104,12 @@ function mmogame_change_javascript( $type, $file, $search = '', $replace = '') {
 
     $s = file_get_contents( dirname(__FILE__).'/'.$file);
 
+    // Remove multi-line comments (/* ... */).
+    $s = preg_replace('/\/\*.*?\*\//s', '', $s);
+
+    $s = preg_replace('/\n\s*\n/', "\n", $s); // Remove empty lines.
+
+    // Changes variables.
     $source = $dest = [];
     if ($search != '') {
         $source[] = $search;

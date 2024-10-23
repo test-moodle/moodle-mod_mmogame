@@ -28,11 +28,24 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once(dirname(__FILE__) . '/quiz_alone.php');
 
+/**
+ * The class mmogame_quiz_aduel play the game Quiz (Aduel).
+ */
 class mmogame_quiz_aduel extends mmogame_quiz_alone {
+    /** @var numquestions: number of questions that contain one group of questions. */
     protected $numquestions;
+    /** @var aduel: ADuel object or false if no object yet. */
     protected $aduel = false;
+    /** @var maxalone: maximum number of questions that a user can play withoyt an oponent. */
     protected $maxalone = 200;
 
+    /**
+     * Constructor.
+     *
+     * @param object $db (the database)
+     * @param object $rgame (a record from table mmogame)
+     * @param object $rinstance (a record from table mmogame_aa_instances)
+     */
     public function __construct($db, $rgame, $rinstance) {
         $rgame->usemultichoice = true;
 
@@ -49,18 +62,41 @@ class mmogame_quiz_aduel extends mmogame_quiz_alone {
         $this->callupdategrades = true;
     }
 
+    /**
+     * Loads the aduel record from table mmogame_am_aduel_pairs.
+     *
+     * @param object $attempt
+     * @return object (a record from table mmogame_am_aduel_pairs)
+     */
     public function set_attempt($attempt) {
         $this->aduel = $this->db->get_record_select( 'mmogame_am_aduel_pairs', 'id=?', [$attempt->numteam]);
     }
 
+    /**
+     * Return the aduel class variable.
+     *
+     * @param object $attempt
+     * @return object (a record from table mmogame_am_aduel_pairs)
+     */
     public function get_aduel() {
         return $this->aduel;
     }
 
+    /**
+     * Return the maxalone class variable.
+     *
+     * @param object $attempt
+     * @return object (a record from table mmogame_am_aduel_pairs)
+     */
     public function get_maxalone() {
         return $this->maxalone;
     }
 
+    /**
+     * Tries to find an attempt of open games, otherwise creates a new attempt.
+     *
+     * @return object (a new attempt of false if no attempt)
+     */
     public function get_attempt() {
         if ($this->rstate->state != MMOGAME_ADUEL_STATE_PLAY) {
             return false;
@@ -98,6 +134,11 @@ class mmogame_quiz_aduel extends mmogame_quiz_alone {
         return false;
     }
 
+    /**
+     * Creates a new attempt for the first player. Also selects which question will be contained in the attempt.
+     *
+     * @return object (a new attempt of false if no attempt)
+     */
     protected function get_attempt_new1() {
         $queries = $this->get_queries_aduel( 4, mt_rand( 1, 2) == 1);
         if ($queries === false) {
@@ -127,6 +168,11 @@ class mmogame_quiz_aduel extends mmogame_quiz_alone {
     }
 
 
+    /**
+     * Creates a new attempt for the second player.
+     *
+     * @return object (a new attempt of false if no attempt)
+     */
     protected function get_attempt_new2() {
         $table = 'mmogame_quiz_attempts';
         $ginstanceid = $this->get_ginstanceid();
@@ -153,6 +199,17 @@ class mmogame_quiz_aduel extends mmogame_quiz_alone {
         return $this->db->get_record_select( $table, 'id=?', [$ret]);
     }
 
+    /**
+     * Saves informations about the user's answer.
+     *
+     * @param object $attempt
+     * @param object $query
+     * @param string $useranswer
+     * @param boolean $autograde
+     * @param boolean $submit
+     * @param array $ret (will contains all information)
+     * @return boolean (is correct or not)
+     */
     public function set_answer($attempt, $query, $useranswer, $autograde, $submit, &$ret) {
         $retvalue = parent::set_answer( $attempt, $query, $useranswer, $autograde, $submit, $ret);
         if (!$submit) {
@@ -221,6 +278,13 @@ class mmogame_quiz_aduel extends mmogame_quiz_alone {
         return $retvalue;
     }
 
+    /**
+     * Saves to array $ret informations about the $attempt.
+     *
+     * @param array &$ret (returns info about the current attempt)
+     * @param object $attempt
+     * @param object $data
+     */
     public function append_json(&$ret, $attempt, $data) {
         $query = parent::append_json( $ret, $attempt, $data);
 
@@ -305,10 +369,23 @@ class mmogame_quiz_aduel extends mmogame_quiz_alone {
         }
     }
 
+    /**
+     * Return true if this attempt will has the wizard tool.
+     *
+     * @param int $attemptid
+     * @return boolean (true or false)
+     */
     public function iswizard($attemptid) {
         return $attemptid % (2 * $this->numquestions) == 0;
     }
 
+    /**
+     * Saves to array $ret informations about the $attempt (only for the second player).
+     *
+     * @param array &$ret (returns info about the current attempt)
+     * @param object $query
+     * @param int $attemptid
+     */
     protected function append_json_only2(&$ret, $query, $attemptid) {
         $correctid = $query->correctid;
         $ids = [];
@@ -331,6 +408,13 @@ class mmogame_quiz_aduel extends mmogame_quiz_alone {
         }
     }
 
+    /**
+     * Saves to array $ret informations about the $attempt (only for the first player).
+     *
+     * @param array &$ret (returns info about the current attempt)
+     * @param object $query
+     * @param int $attemptid
+     */
     protected function append_json_only1(&$ret, $query, $attemptid) {
         $correctid = $query->correctid;
 
@@ -344,6 +428,13 @@ class mmogame_quiz_aduel extends mmogame_quiz_alone {
         }
     }
 
+    /**
+     * Saves to array $ret informations about the $attempt (only for the second player).
+     *
+     * @param array &$ret (returns info about the current attempt)
+     * @param object $query
+     * @param int $attemptid
+     */
     public function get_queries_aduel($count, $mostused) {
         // Get the ids of all the queries.
         $ids = $this->qbank->get_queries_ids();
@@ -449,123 +540,5 @@ class mmogame_quiz_aduel extends mmogame_quiz_alone {
             ['countanswers' => count( $ids)]);
 
         return count( $ret) ? $ret : false;
-    }
-
-    public function get_queries_aduel_method1_blocks($count, $mostused) {
-        // Get the ids of all the queries.
-        $ids = $this->qbank->get_queries_ids();
-        if ($ids === false) {
-            return false;
-        }
-
-        // Initializes data.
-        $qs = [];
-        foreach ($ids as $id) {
-            $q = new stdClass();
-            $q->id = $id;
-            $q->qpercent = $q->qcountused = $q->ucountused = $q->ucountcorrect = $q->ucounterror = $q->utimeerror = null;
-
-            $qs[$id] = $q;
-        }
-
-        // Computes statistics per question.
-        $rinstance = $this->get_rinstance();
-        $sids = implode( ',', $ids);
-        $recs = $this->db->get_records_select( 'mmogame_aa_stats',
-            "ginstanceid=? AND numgame=? AND auserid IS NULL AND queryid IN ($sids)",
-            [$rinstance->id, $rinstance->numgame], null, 'id,queryid,percent,countused');
-        foreach ($recs as $rec) {
-            $q = &$qs[$rec->queryid];
-            $q->qpercent = $rec->percent;
-            $q->qcountused = $rec->countused;
-        }
-
-        // Computes statistics per user.
-        $recs = $this->db->get_records_select( 'mmogame_aa_stats',
-            "ginstanceid=? AND numgame=? AND auserid = ? AND queryid IN ($sids)",
-            [$rinstance->id, $rinstance->numgame, $this->auserid], null,
-            'queryid,countused,countcorrect,counterror, timeerror');
-        foreach ($recs as $rec) {
-            $q = &$qs[$rec->queryid];
-            $q->ucountused = $rec->countused;
-            $q->ucountcorrect = $rec->countcorrect;
-            $q->ucounterror = $rec->counterror;
-            $q->utimeerror = $rec->timeerror;
-        }
-
-        // Selects a question per block of questions.
-        $map = $this->get_queries_aduel_blocks( $this->numquestions, $qs);
-
-        $ret = [];
-        foreach ($map as $id) {
-            if (count( $ret) >= $count) {
-                break;
-            }
-            $q = $this->qbank->load( $id, true);
-            $ret[] = $q;
-        }
-
-        // Update statistics.
-        foreach ($ret as $q) {
-            $this->qbank->update_stats( $this->auserid, null, $q->id, 1, 0, 0);
-            $this->qbank->update_stats( null, null, $q->id, 1, 0, 0);
-        }
-        $this->qbank->update_stats( $this->auserid, null, null, count( $ret), 0, 0);
-
-        return count( $ret) ? $ret : false;
-    }
-
-    private function get_queries_aduel_blocks($count, $qs) {
-        $qsort = [];
-        // I split question in groups dependly on percent on all users.
-        foreach ($qs as $q) {
-            $key = sprintf( '%10.7f %10d %10d', 1 - $q->qpercent, mt_rand( 0, 1000 * 1000 - 1), $q->id);
-            $qsort[$key] = $q;
-        }
-        ksort( $qsort);
-
-        $blocks = [];
-        $block = [];
-        $num = 0;
-        $numblock = 1;
-        $stop = round( $numblock * count( $qsort) / $count);
-        foreach ($qsort as $q) {
-            $block[] = $q;
-            $num++;
-            if ($num == $stop) {
-                $blocks[] = $block;
-                $block = [];
-                $stop = round( (++$numblock) * count( $qsort) / $count);
-            }
-        }
-        if (count( $block)) {
-            $blocks[] = $block;
-        }
-
-        $ret = [];
-        foreach ($blocks as $block) {
-            $ret[] = $this->get_queries_aduel_blocks_one( $block);
-        }
-
-        return $ret;
-    }
-
-    public function get_queries_aduel_blocks_one($block) {
-        $t = [];
-
-        foreach ($block as $q) {
-            $r = mt_rand( 0, 1000 * 1000 - 1);
-            $count = $q->ucountcorrect - $q->ucounterror + 10000;
-            $key = sprintf( '%10d %10d %10d %10.2f %10d %10d',
-                $count, $q->ucountused, $q->qcountused, $q->qpercent, $r, $q->id);
-            $t[$key] = $q;
-        }
-        ksort( $t);
-
-        foreach ($t as $rec) {
-            return $rec->id;
-        }
-
-        return false;
     }
 }

@@ -24,6 +24,13 @@
 
 require_once(dirname(__FILE__) . '/../../model/aduel.php');
 
+/**
+ * Fill the array $ret with info about the current attempt.
+ *
+ * @param object $data
+ * @param object $game
+ * @param array $ret
+ */
 function mmogame_json_quiz_getattempt($data, $game, &$ret) {
     global $CFG;
 
@@ -47,7 +54,7 @@ function mmogame_json_quiz_getattempt($data, $game, &$ret) {
             'colorpaletteid' => $data->paletteid, ]);
     }
 
-    if( $game->get_state() != 0) {
+    if ($game->get_state() != 0) {
         $attempt = $game->get_attempt();
     } else {
         $attempt = false;
@@ -56,7 +63,14 @@ function mmogame_json_quiz_getattempt($data, $game, &$ret) {
     $game->append_json( $ret, $attempt, $data);
 }
 
-function mmogame_json_quiz_answer( $data, $game, &$ret) {
+/**
+ * Update the database about the answer of user and returns to variable $ret informations.
+ *
+ * @param object $data
+ * @param object $game
+ * @param array $ret
+ */
+function mmogame_json_quiz_answer($data, $game, &$ret) {
     $auserid = mmogame::get_asuerid_from_object( $game->get_db(), $data, $game->get_rinstance());
     $game->login_user( $auserid);
 
@@ -145,6 +159,13 @@ function mmogame_json_quiz_answer( $data, $game, &$ret) {
     }
 }
 
+/**
+ * Fills the variable $ret with information about highscore.
+ *
+ * @param object $data
+ * @param object $game
+ * @param array $ret
+ */
 function mmogame_json_quiz_gethighscore($data, $game, &$ret) {
     $auserid = mmogame::get_asuerid_from_object( $game->get_db(), $data, $game->get_rinstance());
     $game->login_user( $auserid);

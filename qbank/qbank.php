@@ -24,20 +24,38 @@
 
 define( 'MMOGAME_LEARN_MUL', 0.9);
 
+/**
+ * The class mmogameqbank is a based class for saved questions (e.g. glossary, question bank)
+ *
+ * @package    mmogameqbank_moodlequestion
+ * @copyright  2024 Vasilis Daloukas
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class mmogameqbank {
+    /** @var mmogame: the object mmogame that is connected to question bank. */
     protected $mmogame;
 
-    public function __construct( $mmogame) {
+    /**
+     * Constructor.
+     *
+     * @param object $mmogame
+     */
+    public function __construct($mmogame) {
         $this->mmogame = $mmogame;
     }
 
-    public function get_attempt_new( $gid, $count, $stopatend, $usenumattempt, $queries) {
+    /**
+     * The base function for a new attempt.
+     *
+     * @param object $mmogame
+     */
+    public function get_attempt_new($auserid, $count, $stopatend, $usenumattempt, $queries) {
         $db = $this->mmogame->get_db();
         $rinstance = $this->mmogame->get_rinstance();
         $auserid = $this->mmogame->get_auserid();
 
         if ($queries === false) {
-            $queries = $this->get_queries_quotauser( $gid, null, $count);
+            $queries = $this->get_queries( $auserid, null, $count);
             if ($queries === false) {
                 return false;
             }
@@ -72,7 +90,16 @@ class mmogameqbank {
         return $a;
     }
 
-    public function get_queries_quotauser( $auserid, $teamid, $count) {
+    /**
+     * Returns the id of selected queries.
+     *
+     * @param int $auserid
+     * @param int teamid
+     * @param int count (how many queries they want)
+     *
+     * @return array of int or false if no queries found.
+     */
+    protected function get_queries($auserid, $teamid, $count) {
         $ids = $this->get_queries_ids();
         if ($ids === false) {
             return false;
@@ -124,8 +151,19 @@ class mmogameqbank {
         return count( $ret) ? $ret : false;
     }
 
-    // The score2 is a temporary score e.g. chat phase of arguegraph.
-    public function update_grades( $auserid, $score, $score2, $countscore) {
+    /**
+     * Updates the grade in database (table mmogame_aa_grades).
+     *
+     * The score2 is a temporary score e.g. chat phase of arguegraph.
+     *
+     * @param int $auserid
+     * @param int $score
+     * @param int $score2
+     * @param int $countscore (how to increase the score)
+     *
+     * @return array of int or false if no queries found.
+     */
+    public function update_grades($auserid, $score, $score2, $countscore) {
         $db = $this->mmogame->get_db();
         $rinstance = $this->mmogame->get_rinstance();
         $rec = $db->get_record_select( 'mmogame_aa_grades', 'ginstanceid=? AND numgame=? AND auserid=?',
@@ -159,7 +197,20 @@ class mmogameqbank {
         }
     }
 
-    public function update_stats( $auserid, $teamid, $queryid, $isused, $iscorrect, $iserror, $values = false) {
+    /**
+     * Updates statistics in database (table mmogame_aa_stats).
+     *
+     * The score2 is a temporary score e.g. chat phase of arguegraph.
+     *
+     * @param int $auserid
+     * @param int $teamid
+     * @param int $queryid
+     * @param boolean $isused
+     * @param boolean $iscorrect
+     * @param boolean $iserror
+     * @param array $values
+     */
+    public function update_stats($auserid, $teamid, $queryid, $isused, $iscorrect, $iserror, $values = false) {
         $db = $this->mmogame->get_db();
         $rinstance = $this->mmogame->get_rinstance();
 

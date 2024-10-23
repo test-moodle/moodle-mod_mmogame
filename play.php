@@ -19,7 +19,9 @@
  *
  * This class provides all the functionality for the new mmogame module.
  *
- * @package   mod_mmogame
+ * @package    mod_mmogame
+ * @copyright  2019 Vasilis Daloukas
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 require_once(dirname(__FILE__) . '/../../config.php');

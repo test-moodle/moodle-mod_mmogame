@@ -28,17 +28,35 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once("$CFG->libdir/formslib.php");
 
+/**
+ * The class mmogame_quiz_alone_admin extentes the class moodleform
+ *
+ * @package    mmogametype_quiz
+ * @copyright  2024 Vasilis Daloukas
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class mmogame_quiz_alone_admin extends moodleform {
+    /** @var _id: the course_module id. */
     protected $_id;
+    /** @var _mmogame: the coresponding mmogame. */
     protected $_mmogame;
 
-    public function __construct( $id, $mmogame) {
+    /**
+     * Constructor.
+     *
+     * @param int $id
+     * @param object $mmogame
+     */
+    public function __construct($id, $mmogame) {
         $this->_id = $id;
         $this->_mmogame = $mmogame;
 
         parent::__construct();
     }
 
+    /**
+     * Definition of form.
+     */
     public function definition() {
         $mform = $this->_form;
         $rinstance = $this->_mmogame->get_rinstance();

@@ -28,6 +28,13 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once("admin_alone.php");
 
+/**
+ * The class mmogame_quiz_aduel_admin extentes the class mmogame_quiz_alone_admin (for future customization)
+ *
+ * @package    mmogametype_quiz
+ * @copyright  2024 Vasilis Daloukas
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class mmogame_quiz_aduel_admin extends mmogame_quiz_alone_admin {
 
 }
